@@ -1,0 +1,160 @@
+Pan de molde
+Pan integral
+Pan de centeno
+Pan de avena
+Pan campesino
+Pan de leche
+Pan de miga
+Pan de hot dog
+Pan de hamburguesa
+Pan baguette
+Pan de pita
+Pan de pita integral
+Pan de pita de trigo
+Pan árabe
+Pan de pita con semillas
+Pan de pizza
+Pan de chocolate
+Pan de maíz
+Pan de aceite de oliva
+Pan de calabaza
+Pan de ajo
+Pan de cebolla
+Pan de espelta
+Pan de quinoa
+Pan de avena integral
+Pan de queso
+Pan de nuez
+Pan de chocolate con almendras
+Pan de plátano
+Pan de zanahoria
+Pan de naranja
+Pan de frutos rojos
+Pan de frutas
+Pan de hierbas
+Pan de batata
+Pan de choclo
+Pan de ajonjolí
+Pan de sésamo
+Pan de linaza
+Pan de avena con pasas
+Pan de guayaba
+Pan de uvas
+Pan de manzana
+Pan de durazno
+Pan de melaza
+Pan de jengibre
+Pan dulce
+Pan de pascua
+Panettone
+Brioche
+Croissant
+Croissant de almendra
+Croissant de chocolate
+Pain au chocolat
+Pain de Campagne
+Pan de chocolate relleno
+Churros
+Donas
+Donas glaseadas
+Donas rellenas
+Tarta de manzana
+Tarta de frambuesa
+Tarta de fresa
+Tarta de durazno
+Tarta de limón
+Tarta de chocolate
+Tarta de queso
+Tarta de café
+Tarta de moras
+Tarta de pera
+Tarta de cereza
+Tarta de frutos rojos
+Tarta de manzana y canela
+Tarta de mousse
+Tarta de piña
+Tarta de almendra
+Tarta de coco
+Tarta de calabaza
+Tarta de crema
+Tarta de avellanas
+Tarta de higos
+Muffins
+Muffins de arándano
+Muffins de chocolate
+Muffins de plátano
+Muffins de manzana
+Muffins de zanahoria
+Muffins de avena
+Muffins de calabaza
+Muffins de frutos rojos
+Bollos
+Bollos de mantequilla
+Bollos de canela
+Bollos de chocolate
+Bollos de crema
+Bollos rellenos
+Bollos de frutas
+Bollos de avena
+Bollos integrales
+Bollos de naranja
+Bollos de limón
+Bollos de almendra
+Bollos de coco
+Pan de chocolate y nuez
+Bizcochos
+Bizcocho de vainilla
+Bizcocho de chocolate
+Bizcocho de zanahoria
+Bizcocho de limón
+Bizcocho de manzana
+Bizcocho de crema
+Bizcocho de frutos rojos
+Bizcocho de queso
+Bizcocho de almendras
+Bizcocho de avena
+Galletas
+Galletas de avena
+Galletas de chocolate
+Galletas de mantequilla
+Galletas de jengibre
+Galletas de canela
+Galletas de almendra
+Galletas de naranja
+Galletas de limón
+Galletas de coco
+Galletas de arroz
+Galletas de cacao
+Galletas de frutos secos
+Galletas rellenas
+Galletas de chocolate y nuez
+Galletas integrales
+Galletas de manteca
+Galletas de avena y pasas
+Galletas de mantequilla y mermelada
+Galletas de crema
+Galletas de chocolate blanco
+Galletas de frutas
+Galletas de especias
+Pasteles
+Pastel de crema
+Pastel de chocolate
+Pastel de frutas
+Pastel de limón
+Pastel de queso
+Pastel de café
+Pastel de zanahoria
+Pastel de manzana
+Pastel de durazno
+Pastel de fresa
+Pastel de calabaza
+Pastel de almendras
+Pastel de coco
+Pastel de naranja
+Pastel de piña
+Pastel de durazno
+Pastel de chocolate con crema
+Pastel de mousse
+Pastel de cereza
+Pastel de tiramisú
+Pastel de chantilly

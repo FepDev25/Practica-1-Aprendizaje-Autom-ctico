@@ -1,0 +1,134 @@
+Café en grano
+Café molido
+Café instantáneo
+Café descafeinado
+Café orgánico
+Café arábica
+Café robusta
+Café espresso
+Café americano
+Café latte
+Café capuchino
+Café moka
+Café frío
+Café con leche
+Café helado
+Café de especialidad
+Café de filtro
+Café turco
+Café de máquina
+Café con vainilla
+Café con chocolate
+Café con canela
+Café con almendras
+Café con caramelo
+Café de olla
+Café mexicano
+Café brasileño
+Café colombiano
+Café costarricense
+Café peruano
+Café ecuatoriano
+Café de origen
+Café tostado
+Café molido fino
+Café molido grueso
+Café en cápsulas
+Café en pods
+Café de cápsulas Nespresso
+Café en cápsulas Dolce Gusto
+Café orgánico molido
+Café de comercio justo
+Té negro
+Té verde
+Té blanco
+Té oolong
+Té rojo
+Té de hierbas
+Té de menta
+Té de manzanilla
+Té de frutos rojos
+Té de jazmín
+Té de limón
+Té de naranja
+Té de hierbaluisa
+Té de hibisco
+Té de canela
+Té chai
+Té de moringa
+Té de camomila
+Té de lavanda
+Té de rosa mosqueta
+Té de ginseng
+Té de jengibre
+Té de frutas tropicales
+Té de piña
+Té de coco
+Té de ciruela
+Té de melisa
+Té de té verde matcha
+Té detox
+Té adelgazante
+Té energizante
+Té antioxidante
+Té con jengibre
+Té con limón
+Té con miel
+Té con frutas
+Té con stevia
+Té ecológico
+Té sin cafeína
+Infusión de té
+Infusión de manzanilla
+Infusión de jengibre
+Infusión de frutas
+Infusión de hierbas
+Infusión detox
+Infusión de romero
+Infusión de diente de león
+Infusión de lavanda
+Infusión de cola de caballo
+Infusión de cardo mariano
+Infusión de valeriana
+Infusión de menta piperita
+Infusión de flor de saúco
+Chocolate caliente
+Chocolate con leche
+Chocolate amargo
+Chocolate blanco
+Cacao en polvo
+Cocoa caliente
+Cocoa en tabletas
+Cocoa orgánico
+Cacao puro
+Cocoa con leche
+Cocoa sin azúcar
+Cocoa vegana
+Cocoa sin lactosa
+Chocolate con especias
+Chocolate con menta
+Chocolate con canela
+Café con leche en cápsulas
+Café de avena
+Café con crema
+Café sin lactosa
+Café en sobres
+Café con sabores
+Café en polvo instantáneo
+Café crema
+Café glacé
+Café con sabor a avellanas
+Café de vainilla
+Café con leche en polvo
+Té helado
+Té frío
+Té saborizado
+Café frío enlatado
+Café latte enlatado
+Café cappuccino enlatado
+Té verde en bolsitas
+Té negro en bolsitas
+Té de frutas en bolsitas
+Té blanco en bolsitas
+Infusión de hierbas en bolsitas
+Café expreso en cápsulas

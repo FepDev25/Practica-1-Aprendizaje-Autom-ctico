@@ -1,0 +1,5 @@
+reduccion de varibales, reduccion, construccion de variables, fase 1 notebook con la carga de datos
+notebbok del modelo
+recibir dos elementos, id del producto y una fecha, devuelve la prediccion de ventas para ese prdocuto
+
+mlflow, marimo

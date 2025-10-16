@@ -1,0 +1,67 @@
+Cerveza
+Cerveza lager
+Cerveza pilsner
+Cerveza stout
+Cerveza IPA
+Cerveza artesanal
+Cerveza de trigo
+Cerveza sin alcohol
+Cerveza de sabor
+Cerveza negra
+Cerveza rubia
+Cerveza oscura
+Cerveza artesanal de frutas
+Cerveza artesanal de miel
+Vino tinto
+Vino blanco
+Vino rosado
+Vino espumoso
+Vino de mesa
+Vino de postre
+Vino de frutas
+Vino orgánico
+Champagne
+Prosecco
+Cava
+Sidra
+Sidra de manzana
+Sidra de pera
+Sidra espumosa
+Whisky
+Whisky escocés
+Whisky irlandés
+Whisky bourbon
+Whisky canadiense
+Whisky japonés
+Ron
+Ron blanco
+Ron oscuro
+Ron añejo
+Ron de coco
+Tequila
+Tequila blanco
+Tequila reposado
+Tequila añejo
+Mezcal
+Ginebra
+Ginebra clásica
+Ginebra seca
+Ginebra con sabor
+Vodka
+Vodka ruso
+Vodka con sabor
+Cachaza
+Brandy
+Cognac
+Vermouth
+Vermouth seco
+Vermouth dulce
+Licor de cacao
+Licor de frutas
+Licor de café
+Licor de hierbas
+Licor de crema irlandesa
+Licor de anís
+Licor de almendra
+Licor de durazno
+Licor de cereza
