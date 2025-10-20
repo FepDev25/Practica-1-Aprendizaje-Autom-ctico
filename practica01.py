@@ -7,8 +7,9 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
+    import plotly.express as px
     import pandas as pd
-    return mo, pd
+    return mo, pd, px
 
 
 @app.cell
@@ -119,7 +120,131 @@ def _(df, pd):
     df.expiration_date = pd.to_datetime(df.expiration_date)
 
     df.info()
+    return
 
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 4. Análisis univriado""")
+    return
+
+
+@app.cell
+def _(df, px):
+    # Histograma interactivo de la cantidad disponible
+    fig_cantidad = px.histogram(
+        df,
+        x="quantity_available",
+        title="Distribución de la Cantidad Disponible",
+        marginal="box",
+        hover_data=df.columns,
+    )
+
+    # AÑADE UN BORDE a las barras
+    fig_cantidad.update_traces(
+        marker_line_color='rgb(8,48,107)', # Un color de borde oscuro
+        marker_line_width=1
+    )
+
+    # Muestra el gráfico
+    fig_cantidad
+    return
+
+
+@app.cell
+def _(df, px):
+    # Histograma interactivo del costo unitario
+    fig_costo = px.histogram(
+        df,
+        x="unit_cost",
+        title="Distribución del Costo Unitario",
+        marginal="box"
+    )
+
+    fig_costo.update_traces(
+        marker_line_color='rgb(8,48,107)', # Un color de borde oscuro
+        marker_line_width=1
+    )
+
+    # Muestra el gráfico
+    fig_costo
+    return
+
+
+@app.cell
+def _(df, px):
+    # Histograma interactivo del uso diario
+    fig_uso = px.histogram(
+        df,
+        x="average_daily_usage",
+        title="Distribución del Uso Diario Promedio",
+        marginal="box"
+    )
+
+    fig_uso.update_traces(
+        marker_line_color='rgb(8,48,107)', # Un color de borde oscuro
+        marker_line_width=1
+    )
+
+    # Muestra el gráfico
+    fig_uso
+    return
+
+
+@app.cell
+def _(df):
+    # Conteo de la columna 'stock_status'
+    df['stock_status'].value_counts()
+    return
+
+
+@app.cell
+def _(df, px):
+    # Gráfico de barras interactivo para 'stock_status'
+    # Usamos el DataFrame de value_counts() para un mejor control
+    status_counts = df['stock_status'].value_counts().reset_index()
+    status_counts.columns = ['Stock Status', 'Count']
+
+    fig_status = px.bar(
+        status_counts,
+        x='Stock Status',
+        y='Count',
+        title='Frecuencia del Estado del Stock',
+        color='Stock Status',
+        template='plotly_white',
+    )
+
+    # Muestra el gráfico
+    fig_status
+    return
+
+
+@app.cell
+def _(df, px):
+    # 1. Calcular el Top 10 de proveedores
+    top_10_suppliers = df['supplier_name'].value_counts().nlargest(10).reset_index()
+    top_10_suppliers.columns = ['Proveedor', 'Registros']
+
+    # 2. Mostrar la tabla (Marimo la renderiza bonito)
+    print(top_10_suppliers)
+
+    # 3. Graficar el Top 10
+    fig_suppliers = px.bar(
+        top_10_suppliers,
+        x='Proveedor',
+        y='Registros',
+        title='Top 10 Proveedores por Nro. de Registros de Producto',
+        template='plotly_white'
+    )
+
+    # Borde a las barras
+    fig_suppliers.update_traces(
+        marker_line_color='rgb(0,0,0)', # Color del borde negro
+        marker_line_width=1.5           # Ancho del borde
+    )
+
+    # Muestra el gráfico
+    fig_suppliers
     return
 
 
