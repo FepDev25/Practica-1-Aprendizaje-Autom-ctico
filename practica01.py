@@ -9,7 +9,9 @@ def _():
     import marimo as mo
     import plotly.express as px
     import pandas as pd
-    return mo, pd, px
+    import numpy as np
+    from scipy.stats import zscore
+    return mo, np, pd, px, zscore
 
 
 @app.cell
@@ -245,6 +247,177 @@ def _(df, px):
 
     # Muestra el gráfico
     fig_suppliers
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 5. Análisis Bivariado y Multivariado""")
+    return
+
+
+@app.cell
+def _(df, px):
+    # Scatter plot: Costo Unitario vs. Cantidad Disponible
+    fig_scatter = px.scatter(
+        df,
+        x="unit_cost",
+        y="quantity_available",
+        title="Relación entre Costo Unitario y Cantidad Disponible",
+        template="plotly_white",
+        hover_data=["product_name"]  # Muestra el nombre del producto al pasar el mouse
+    )
+
+    fig_scatter.update_traces(
+        marker=dict(line=dict(width=1, color='DarkSlateGrey'))
+    )
+
+    fig_scatter
+    return
+
+
+@app.cell
+def _(df, px):
+    # 1. Seleccionar solo las columnas numéricas
+    numeric_cols = df.select_dtypes(include=['int64', 'float64'])
+
+    # 2. Calcular la matriz de correlación
+    corr_matrix = numeric_cols.corr()
+
+    # 3. Visualizar el heatmap
+    # 'color_continuous_scale' nos da un mejor rango de color (Rojo-Azul)
+    fig_heatmap = px.imshow(
+        corr_matrix,
+        text_auto=True,  # Muestra los valores numéricos en las celdas
+        aspect="auto",
+        title="Mapa de Calor de Correlación Numérica",
+        color_continuous_scale='RdBu_r', # 'r' invierte la escala (Rojo=1, Azul=-1)
+        zmin=-1, # Fija los límites del color
+        zmax=1
+    )
+
+    fig_heatmap
+    return (numeric_cols,)
+
+
+@app.cell
+def _(df, px):
+    # Boxplot: Cantidad Disponible vs. Estado del Stock
+    fig_box = px.box(
+        df,
+        x="stock_status",
+        y="quantity_available",
+        color="stock_status",  # Da un color a cada categoría
+        title="Distribución de Cantidad Disponible por Estado del Stock",
+        template="plotly_white"
+    )
+
+    fig_box
+    return
+
+
+@app.cell
+def _(df, pd, px):
+    # 1. Crear la tabla de contingencia (crosstab)
+    cross_tab = pd.crosstab(df['warehouse_location'], df['stock_status'])
+
+    # 2. "Derretir" (melt) la tabla para que Plotly pueda usarla
+    cross_tab_tidy = cross_tab.reset_index().melt(id_vars='warehouse_location')
+
+    # 3. Mostrar la tabla "tidy" (opcional, para que veas cómo queda)
+    cross_tab_tidy.head()
+
+    # 4. Crear el gráfico de barras agrupado
+    fig_grouped_bar = px.bar(
+        cross_tab_tidy,
+        x="warehouse_location",
+        y="value",
+        color="stock_status",
+        title="Estado del Stock por Ubicación del Almacén",
+        template="plotly_white",
+        barmode="group"  # <-- Esto crea las barras agrupadas
+    )
+
+    fig_grouped_bar
+    return
+
+
+@app.cell
+def _(df, px):
+    # Lista de columnas clave para el pairplot
+    pairplot_cols = [
+        'quantity_available',
+        'unit_cost',
+        'average_daily_usage',
+        'reorder_point',
+        'total_value',
+        'stock_status' # La usaremos para el color
+    ]
+
+    # Creamos el 'scatter_matrix' (equivalente a pairplot)
+    fig_pairplot = px.scatter_matrix(
+        df[pairplot_cols],
+        dimensions=['quantity_available', 'unit_cost', 'average_daily_usage', 'reorder_point'],
+        color="stock_status",  # Colorea los puntos por estado de stock
+        title="Pairplot de Variables Clave (Coloreado por Estado de Stock)"
+    )
+
+    # Hacemos los puntos más pequeños y con borde para que se vea mejor
+    fig_pairplot.update_traces(
+        marker=dict(size=3, line=dict(width=0.5, color='DarkSlateGrey'))
+    )
+
+    fig_pairplot
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 6. Detección de outliers""")
+    return
+
+
+@app.cell
+def _(df, numeric_cols):
+    # Iterar sobre cada columna para calcular outliers
+    for col in numeric_cols:
+        Q1 = df[col].quantile(0.25)
+        Q3 = df[col].quantile(0.75)
+        IQR = Q3 - Q1
+    
+        # Definir los límites
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+    
+        # Identificar los outliers
+        outliers = df[(df[col] < lower_bound) | (df[col] > upper_bound)]
+    
+        if not outliers.empty:
+            print(f"\nColumna: '{col}'")
+            print(f"Límites (IQR): ({lower_bound:.2f}, {upper_bound:.2f})")
+            print(f"Total de outliers detectados: {len(outliers)}")
+            # print(outliers[[col, 'product_name']].sort_values(by=col, ascending=False).head())
+        else:
+            print(f"\nColumna: '{col}' -> Sin outliers (según IQR).")
+    return (outliers,)
+
+
+@app.cell
+def _(df, np, numeric_cols, outliers, zscore):
+    threshold = 3 # Umbral estándar
+
+    for col_2 in numeric_cols:
+        z_scores = np.abs(zscore(df[col_2]))
+    
+        outliers_2 = df[z_scores > threshold]
+    
+        if not outliers.empty:
+            print(f"\nColumna: '{col_2}'")
+            print(f"Umbral (Z-score): {threshold}")
+            print(f"Total de outliers detectados: {len(outliers_2)}")
+            # print(outliers[[col_2, 'product_name']].sort_values(by=col_2, ascending=False).head())
+        else:
+            print(f"\nColumna: '{col_2}' -> Sin outliers (Z-score < {threshold}).")
     return
 
 
