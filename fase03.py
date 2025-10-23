@@ -226,7 +226,138 @@ def _(np, pd, predict_demand):
         print(f"   Mediana: {successful.median():.2f} unidades")
         print(f"   Mínimo: {successful.min():.2f} unidades")
         print(f"   Máximo: {successful.max():.2f} unidades")
+    return
 
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ## Documentación de Uso y Despliegue en Producción
+
+    ### Uso de la Función `predict_demand()`
+
+    La función principal de inferencia acepta dos parámetros y retorna una predicción numérica o un mensaje de error descriptivo.
+
+    **Firma de la función:**
+    ```python
+    predict_demand(product_id_str: str, target_date_str: str) -> float | str
+    ```
+
+    **Parámetros:**
+    - `product_id_str`: Identificador único del producto (ej. "PROD-00136830")
+    - `target_date_str`: Fecha objetivo en formato ISO "YYYY-MM-DD" (ej. "2025-10-31")
+
+    **Valor de retorno:**
+    - `float`: Predicción de stock en unidades reales (≥ 0)
+    - `str`: Mensaje de error si la validación falla o no hay datos suficientes
+
+    **Casos de uso:**
+
+    1. **Predicción exitosa:**
+    ```python
+    stock = predict_demand("PROD-00136830", "2025-10-31")
+    # Retorna: 4253.67
+    ```
+
+    2. **Producto no visto en entrenamiento:**
+    ```python
+    stock = predict_demand("PROD-NUEVO", "2025-10-31")
+    # Retorna: "Error: El ID de producto 'PROD-NUEVO' no fue visto durante el entrenamiento."
+    ```
+
+    3. **Historia insuficiente:**
+    ```python
+    stock = predict_demand("PROD-00136830", "2023-01-05")
+    # Retorna: "Error: No hay suficiente historia (3 días) para predecir. Se necesitan 7 días."
+    ```
+
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    ### Propuestas de Despliegue mediante API Web
+
+    #### Opción 1: API REST con FastAPI
+
+    **Ventajas:**
+    - Framework moderno y de alto rendimiento
+    - Documentación automática con Swagger/OpenAPI
+    - Validación de datos con Pydantic
+    - Soporte nativo para async/await
+
+    **Estructura propuesta:**
+    ```python
+    # api/main.py
+    from fastapi import FastAPI, HTTPException
+    from pydantic import BaseModel
+    from datetime import date
+    import joblib
+    from tensorflow.keras.models import load_model
+
+    app = FastAPI(title="Inventory Prediction API", version="1.0.0")
+
+    # Cargar artefactos al iniciar
+    @app.on_event("startup")
+    async def load_artifacts():
+        global model, scaler, le_product_id, df_features
+        model = load_model('best_model.keras')
+        scaler = joblib.load('min_max_scaler.joblib')
+        le_product_id = joblib.load('le_product_id.joblib')
+        df_features = pd.read_csv('df_processed_features.csv')
+
+    # Modelo de datos para la solicitud
+    class PredictionRequest(BaseModel):
+        product_id: str
+        target_date: date
+
+    # Modelo de respuesta
+    class PredictionResponse(BaseModel):
+        product_id: str
+        target_date: date
+        predicted_stock: float
+        confidence: str
+
+    # Endpoint de predicción
+    @app.post("/predict", response_model=PredictionResponse)
+    async def predict_stock(request: PredictionRequest):
+        result = predict_demand(request.product_id, str(request.target_date))
+
+        if isinstance(result, str):  # Error
+            raise HTTPException(status_code=400, detail=result)
+
+        return PredictionResponse(
+            product_id=request.product_id,
+            target_date=request.target_date,
+            predicted_stock=result,
+            confidence="high"
+        )
+
+    # Endpoint de salud
+    @app.get("/health")
+    async def health_check():
+        return {"status": "healthy", "model_loaded": model is not None}
+    ```
+
+    **Ejecución:**
+    ```bash
+    pip install fastapi uvicorn
+    uvicorn api.main:app --reload --host 0.0.0.0 --port 8000
+    ```
+
+    **Consumo:**
+    ```bash
+    curl -X POST "http://localhost:8000/predict" \
+         -H "Content-Type: application/json" \
+         -d '{"product_id": "PROD-00136830", "target_date": "2025-10-31"}'
+    ```
+    """
+    )
     return
 
 
