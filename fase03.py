@@ -76,6 +76,23 @@ def _():
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    Se cargan los artefactos de producción: 
+    - Modelo óptimo `best_model.keras` 
+    - Escalador `min_max_scaler.joblib` para desescalar predicciones.
+    - Codificador `le_product_id.joblib` para validar/convertir `product_id`.
+
+    Además se lee `df_processed_features.csv` (79 174 filas) y se fija la lista de `FEATURE_COLUMNS`. 
+    Estos objetos garantizan que la inferencia use **exactamente** las mismas transformaciones que en el entrenamiento (consistencia entre train y producción).
+
+    """
+    )
+    return
+
+
+@app.cell
 def _(
     FEATURE_COLUMNS,
     NUM_NUMERIC_FEATURES,
@@ -135,6 +152,34 @@ def _(
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    Flujo de inferencia:
+
+    1) **Validación**: 
+       - `product_id` se transforma con `LabelEncoder`; si no fue visto en train, se devuelve un mensaje de error.
+       - `target_date` se convierte a `datetime`; si el formato es inválido, se informa al usuario.
+
+    2) **Construcción del contexto temporal**:
+       - Se filtra el historial del producto **previo** a `target_date` y se ordena por `created_at`.
+       - Se requieren **N_STEPS (=7)** observaciones; si no hay suficientes días, se detiene con mensaje.
+
+    3) **Preparación del input**:
+       - Se toman las últimas 7 filas (`tail(N_STEPS)`), se seleccionan `FEATURE_COLUMNS`, se castea a `float32` y se expande a forma `(1, 7, 30)`.
+
+    4) **Predicción y desescalado**:
+       - El modelo devuelve `pred_scaled` en [0,1]. 
+       - Se embebe en un vector “dummy” con `NUM_NUMERIC_FEATURES` para aplicar `inverse_transform` y recuperar unidades reales de `quantity_available` (índice `TARGET_COLUMN_INDEX`).
+       - Se trunca a `>= 0` y se retorna el valor en **unidades de stock**.
+    Con esto, la función es **determinista y segura** ante entradas no vistas o con historial insuficiente
+
+    """
+    )
+    return
+
+
+@app.cell
 def _(predict_demand):
     print("Prueba 1:")
     TEST_ID = 'PROD-00136830'
@@ -162,6 +207,12 @@ def _(predict_demand):
     else:
         print(f"Resultado: {prediccion_1}")
     return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":
