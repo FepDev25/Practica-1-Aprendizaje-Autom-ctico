@@ -5,6 +5,39 @@ app = marimo.App(width="medium")
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
+    ## Fase 2: Desarrollo y Entrenamiento del Modelo
+    **Nombres:** Felipe Peralta y Samantha Suquilanda
+
+    ---
+
+    ## Menú de Navegación
+
+    1. [Entrenamiento del modelo](#entrenamiento-del-modelo)
+       - [Carga y preparación de datos](#carga-y-preparación-de-datos)
+       - [Arquitectura del modelo GRU](#arquitectura-del-modelo-gru)
+       - [Compilación y configuración de callbacks](#compilación-y-configuración-de-callbacks)
+       - [Entrenamiento y convergencia](#entrenamiento-y-convergencia)
+       - [Visualización de curvas de aprendizaje](#visualización-de-curvas-de-aprendizaje)
+       - [Evaluación del modelo](#evaluación-del-modelo)
+       - [Desnormalización y métricas finales](#desnormalización-y-métricas-finales)
+
+    2. [Análisis de rendimiento](#análisis-de-rendimiento)
+       - [Comparación de predicciones vs valores reales](#comparación-de-predicciones-vs-valores-reales)
+       - [Análisis de distribución de errores](#análisis-de-distribución-de-errores)
+       - [Rendimiento por rango de stock](#rendimiento-por-rango-de-stock)
+       - [Resumen final de métricas](#resumen-final-de-métricas)
+
+    ---
+    """
+    )
+    return
+
+
+@app.cell
 def _():
     import numpy as np
     import tensorflow as tf
@@ -44,6 +77,12 @@ def _():
 @app.cell
 def _(mo):
     mo.md(r"""## Entrenamiento del modelo""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Carga y preparación de datos""")
     return
 
 
@@ -96,6 +135,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Arquitectura del modelo GRU""")
+    return
+
+
+@app.cell
 def _(Dense, Dropout, GRU, INPUT_SHAPE, Sequential):
     # Arquitectura del Modelo (GRU)
 
@@ -135,6 +180,12 @@ def _(mo):
       El resumen del modelo muestra un total de 18 497 parámetros entrenables, confirmando una arquitectura ligera y eficiente para series de inventario multivariadas.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Compilación y configuración de callbacks""")
     return
 
 
@@ -199,6 +250,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Entrenamiento y convergencia""")
+    return
+
+
+@app.cell
 def _(X_train, X_val, early_stopping, model, model_checkpoint, y_train, y_val):
     # Entrenar el Modelo
 
@@ -241,6 +298,12 @@ def _(mo):
     El modelo mostró una convergencia estable y rápida, estabilizando las métricas después de las primeras 10 épocas sin evidencias de sobreajuste.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Visualización de curvas de aprendizaje""")
     return
 
 
@@ -290,6 +353,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Evaluación del modelo""")
+    return
+
+
+@app.cell
 def _(X_val, load_model, math, mean_absolute_error, mean_squared_error, y_val):
     best_model = load_model('best_model.keras')
 
@@ -319,6 +388,12 @@ def _(mo):
     Estos valores confirman un error promedio muy bajo dentro del rango de los datos escalados.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Desnormalización y métricas finales""")
     return
 
 
@@ -404,6 +479,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Comparación de predicciones vs valores reales""")
+    return
+
+
+@app.cell
 def _(plt, y_pred_real, y_val_real):
     plt.figure(figsize=(14, 6))
 
@@ -445,6 +526,12 @@ def _(mo):
     - Sin embargo, el modelo no refleja la distribución real. Las dos formas de distribución son bastante diferentes. Los datos reales (azules) tienen varios "picos" o modas. Las predicciones (naranja), son más "suaves" y centradas, con un gran pico alrededor de 4500 que no existe en los datos reales.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Análisis de distribución de errores""")
     return
 
 
@@ -508,6 +595,12 @@ def _(mo):
     - Sin embargo, el modelo es inconsistente. Aunque normalmente funciona dentro de un rango aceptable (la caja), con frecuencia produce predicciones muy alejadas de su valor real.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Rendimiento por rango de stock""")
     return
 
 
@@ -607,6 +700,12 @@ def _(mo):
     - El modelo es bueno prediciendo stocks bajos, regular prediciendo stocks medios, e inconsistente prediciendo stocks altos.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Resumen final de métricas""")
     return
 
 

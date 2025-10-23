@@ -5,6 +5,39 @@ app = marimo.App(width="medium")
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
+    ## Fase 3: Función de Predicción y Preparación para Despliegue
+    **Nombres:** Felipe Peralta y Samantha Suquilanda
+    
+    ---
+    
+    ## Menú de Navegación
+    
+    1. [Carga de Artefactos de Producción](#carga-de-artefactos-de-producción)
+       - [Carga del modelo y componentes](#carga-del-modelo-y-componentes)
+       - [Análisis de componentes cargados](#análisis-de-componentes-cargados)
+    
+    2. [Función de Predicción](#función-de-predicción)
+       - [Implementación de predict_demand()](#implementación-de-predict_demand)
+       - [Análisis del flujo de inferencia](#análisis-del-flujo-de-inferencia)
+    
+    3. [Validación con Productos Reales](#validación-con-productos-reales)
+       - [Ejecución de predicciones múltiples](#ejecución-de-predicciones-múltiples)
+    
+    4. [Documentación de Despliegue](#documentación-de-despliegue)
+       - [Guía de uso de la función](#guía-de-uso-de-la-función)
+       - [Propuesta de API REST con FastAPI](#propuesta-de-api-rest-con-fastapi)
+    
+    ---
+    """
+    )
+    return
+
+
+@app.cell
 def _():
     import pandas as pd
     import numpy as np
@@ -13,6 +46,18 @@ def _():
     import math
     import marimo as mo
     return joblib, load_model, mo, np, pd
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 1. Carga de Artefactos de Producción""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Carga del modelo y componentes""")
+    return
 
 
 @app.cell
@@ -78,6 +123,12 @@ def _(joblib, load_model, pd):
 
 @app.cell
 def _(mo):
+    mo.md(r"""### Análisis de componentes cargados""")
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(
         r"""
     Se cargan los artefactos de producción: 
@@ -89,6 +140,18 @@ def _(mo):
     Estos objetos garantizan que la inferencia use **exactamente** las mismas transformaciones que en el entrenamiento (consistencia entre train y producción).
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## 2. Función de Predicción""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Implementación de predict_demand()""")
     return
 
 
@@ -153,6 +216,12 @@ def _(
 
 @app.cell
 def _(mo):
+    mo.md(r"""### Análisis del flujo de inferencia""")
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(
         r"""
     Flujo de inferencia:
@@ -180,7 +249,25 @@ def _(mo):
 
 @app.cell
 def _(mo):
+    mo.md(r"""## 3. Validación con Productos Reales""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Preparación para predicciones múltiples""")
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""- Ahora se leerá el dataset de inventario y mediante un bucle se irán realizando las predicciones para diferentes productos.""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Ejecución de predicciones múltiples""")
     return
 
 
@@ -231,6 +318,18 @@ def _(np, pd, predict_demand):
 
 @app.cell
 def _(mo):
+    mo.md(r"""## 4. Documentación de Despliegue""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Guía de uso de la función""")
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(
         r"""
     ## Documentación de Uso y Despliegue en Producción
@@ -271,9 +370,14 @@ def _(mo):
     stock = predict_demand("PROD-00136830", "2023-01-05")
     # Retorna: "Error: No hay suficiente historia (3 días) para predecir. Se necesitan 7 días."
     ```
-
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Propuesta de API REST con FastAPI""")
     return
 
 

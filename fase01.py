@@ -9,8 +9,38 @@ def _(mo):
     mo.md(
         r"""
     # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
-    ##Fase 1: Análisis y Preparación del Dataset
+    ## Fase 1: Análisis y Preparación del Dataset
     **Nombres:** Felipe Peralta y Samantha Suquilanda
+
+    ---
+
+    ## Menú de Navegación
+
+    1. [Data Engineer: Análisis exploratorio de datos](#1-data-engineer-análisis-exploratorio-de-datos)
+       - [Carga de datos](#1-carga-de-datos)
+       - [Diccionario de Datos](#diccionario-de-datos-descripción-de-variables)
+       - [Análisis descriptivo inicial](#2-análisis-descriptivo-inicial)
+       - [Limpieza de datos](#3-limpieza-de-datos)
+       - [Análisis univariado](#4-análisis-univariado)
+       - [Análisis Bivariado y Multivariado](#5-análisis-bivariado-y-multivariado)
+       - [Detección de outliers](#6-detección-de-outliers)
+
+    2. [Feature Engineering](#2-feature-engineering)
+       - [Creación de variables temporales](#creación-de-variables-temporales)
+       - [Variables derivadas del inventario](#variables-derivadas-del-inventario)
+
+    3. [Codificación y Escalado](#3-codificación-y-escalado)
+       - [Codificación de variables categóricas](#codificación-de-variables-categóricas)
+       - [Normalización de variables numéricas](#normalización-de-variables-numéricas)
+       - [Verificación del DataFrame procesado](#verificación-del-dataframe-procesado)
+
+    4. [Preparación de Secuencias](#4-preparación-de-secuencias)
+       - [Configuración de parámetros temporales](#configuración-de-parámetros-temporales)
+       - [División temporal Train/Validation](#división-temporal-trainvalidation)
+       - [Generación de secuencias temporales](#generación-de-secuencias-temporales)
+       - [Exportación de datos procesados](#exportación-de-datos-procesados)
+
+    ---
     """
     )
     return
@@ -491,6 +521,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Creación de variables temporales""")
+    return
+
+
+@app.cell
 def _(df):
     print("Iniciando Feature Engineering...")
 
@@ -564,6 +600,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Codificación de variables categóricas""")
+    return
+
+
+@app.cell
 def _(LabelEncoder, df_feat, joblib, pd):
     df_proc = df_feat.copy()
 
@@ -593,6 +635,12 @@ def _(mo):
     Esta combinación preserva la información nominal sin introducir jerarquías falsas, lo que resulta esencial para modelos neuronales que procesan datos categóricos junto con variables continuas.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Normalización de variables numéricas""")
     return
 
 
@@ -627,6 +675,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Verificación del DataFrame procesado""")
+    return
+
+
+@app.cell
 def _(df_proc):
     print("\nDataFrame Procesado")
     print(df_proc.head())
@@ -656,6 +710,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### Restauración de la columna temporal""")
+    return
+
+
+@app.cell
 def _(df_feat, df_proc):
     df_proc['created_at'] = df_feat['created_at']
     print("DataFrame 'df_proc' listo para la creación de secuencias.")
@@ -665,6 +725,12 @@ def _(df_feat, df_proc):
 @app.cell
 def _(mo):
     mo.md(r"""**Análisis:** El DataFrame "df_proc" está totalmente listo para generar secuencias temporales. Se asegura el orden cronológico apropiado para crear ventanas de tiempo que nutran el modelo RNN si se conserva la columna created_at en formato de fecha.""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Configuración de parámetros temporales""")
     return
 
 
@@ -714,6 +780,12 @@ def _(mo):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""### División temporal Train/Validation""")
+    return
+
+
+@app.cell
 def _(df_proc):
     print("\nDividiendo en Train y Validation")
 
@@ -742,6 +814,12 @@ def _(mo):
     - El resultado muestra 79 174 registros totales: 63 339 para Train y 15 835 para Validation.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Función para generar secuencias temporales""")
     return
 
 
@@ -779,6 +857,12 @@ def _(mo):
     - Este formato es indispensable para alimentar modelos RNN, LSTM o GRU en Keras/TensorFlow.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Generación de secuencias para Train y Validation""")
     return
 
 
@@ -846,6 +930,12 @@ def _(mo):
     - La conclusión revela que los conjuntos poseen la estructura (muestras, 7, 30), lo que confirma 30 variables por observación y 7 pasos temporales.
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### Exportación de datos procesados""")
     return
 
 
