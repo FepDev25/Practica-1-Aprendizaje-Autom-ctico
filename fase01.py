@@ -350,7 +350,7 @@ def _(df, px):
         df,
         x="stock_status",
         y="quantity_available",
-        color="stock_status",  # Da un color a cada categoría
+        color="stock_status", 
         title="Distribución de Cantidad Disponible por Estado del Stock",
         template="plotly_white"
     )
@@ -647,7 +647,7 @@ def _(mo):
         r"""
     **Análisis:**
     - El DataFrame final integra las variables originales y las transformadas, alcanzando 45 columnas. Se observan variables numéricas escaladas, categóricas codificadas y booleanas derivadas del One-Hot Encoding.
-  
+
     - El resultado es un dataset completamente limpio, estructurado y listo para modelado secuencial, cumpliendo con los criterios de la Fase 1 de la guía de práctica
     """
     )

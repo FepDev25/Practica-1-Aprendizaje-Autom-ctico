@@ -21,7 +21,7 @@ def _():
     # modelo
     try:
         model = load_model('best_model.keras')
-        print("Modelo 'best_model.keras' cargado.")
+        print("Modelo 'best_model.keras' cahrgado.")
     except Exception as e:
         print(f"Error al cargar 'best_model.keras': {e}")
 
@@ -46,7 +46,7 @@ def _():
         print(f"Base de datos de features cargada ({len(df_features)} registros).")
     except Exception as e:
         print(f"Error al cargar 'df_processed_features.csv': {e}")
-    
+
     # Lista de columnas
     FEATURE_COLUMNS = [
         'quantity_on_hand', 'quantity_reserved', 'quantity_available',
@@ -95,40 +95,40 @@ def _(
             product_id_encoded = le_product_id.transform([product_id_str])[0]
         except ValueError:
             return f"Error: El ID de producto '{product_id_str}' no fue visto durante el entrenamiento."
-    
+
         # validar fecha
         try:
             target_date = pd.to_datetime(target_date_str)
         except ValueError:
             return f"Error: Formato de fecha incorrecto '{target_date_str}'."
-    
+
         # secuencia histórica
         product_data = df_features[
             (df_features['product_id_encoded'] == product_id_encoded)
         ].sort_values(by='created_at')
-    
+
         historical_data = product_data[product_data['created_at'] < target_date]
-    
+
         # validar historia
         if len(historical_data) < N_STEPS:
             return (f"Error: No hay suficiente historia ({len(historical_data)} días) "
                     f"para predecir. Se necesitan {N_STEPS} días.")
-    
+
         sequence_df = historical_data.tail(N_STEPS)
         input_features_df = sequence_df[FEATURE_COLUMNS]
-    
+
         input_features_scaled = input_features_df.astype(np.float32).values
         input_sequence = np.expand_dims(input_features_scaled, axis=0)
 
         # prediccion
         pred_scaled = model.predict(input_sequence)[0][0]
-    
+
         # des-escalar
         dummy_pred = np.zeros((1, NUM_NUMERIC_FEATURES))
         dummy_pred[:, TARGET_COLUMN_INDEX] = pred_scaled
-    
+
         pred_real = scaler.inverse_transform(dummy_pred)[0][TARGET_COLUMN_INDEX]
-    
+
         print("predicción realizada")
         return max(0, pred_real)
     return (predict_demand,)
