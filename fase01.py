@@ -5,6 +5,18 @@ app = marimo.App(width="medium")
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
+    ##Fase 1: Análisis y Preparación del Dataset
+    **Nombres:** Felipe Peralta y Samantha Suquilanda
+    """
+    )
+    return
+
+
+@app.cell
 def _():
     import marimo as mo
     import plotly.express as px
@@ -19,7 +31,7 @@ def _():
 
 @app.cell
 def _(mo):
-    mo.md(r"""## 1. Análisis exploratorio de datos""")
+    mo.md(r"""## 1. Data Engineer: Análisis exploratorio de datos""")
     return
 
 
@@ -99,6 +111,21 @@ def _(df):
 
 @app.cell
 def _(mo):
+    mo.md(
+        r"""
+    **Análisis de los Resultados:**
+    - Hay 79173 entradas (filas) y 28 columnas (features).
+
+    - Hallazgo Crítico: existen 16 columnas de tipo object. Python usa object para texto (strings). Damos énfasis a las columnas created_at, last_order_date, last_stock_count_date y expiration_date, que están listados como "object".
+
+    - Se puede observar un problema de Tipos de Datos (Dates), dado que vamos a trabajar con series temporales, no se puede trabajar con fechas si están en formato de texto (object).
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""### 3. Limpieza de datos""")
     return
 
@@ -136,7 +163,13 @@ def _(df, pd):
 
 @app.cell
 def _(mo):
-    mo.md(r"""### 4. Análisis univriado""")
+    mo.md(r"""**Análisis:** El primer paso para cualquier análisis de series temporales es garantizar que el índice principal del conjunto de datos sea el tiempo. Se cargó el conjunto de datos original y se determinó que la columna created_at es nuestra variable temporal. Utilizando pd.to_datetime, se llevó a cabo una transformación explícita al formato de fecha y hora.""")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""### 4. Análisis univariado""")
     return
 
 
@@ -160,6 +193,12 @@ def _(df, px):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** La distribución de los valores del coste unitario se presenta en el histograma. Se nota una amplia dispersión, lo cual revela que los costos oscilan de manera significativa entre periodos o productos. El boxplot superior verifica que hay valores extremos (outliers), si bien la mayor parte de los datos se agrupan en el rango medio. Esto indica una considerable variabilidad que podría tener un impacto en la predicción de costos a través del tiempo.""")
+    return
+
+
+@app.cell
 def _(df, px):
     # Histograma interactivo del uso diario
     fig_uso = px.histogram(
@@ -175,6 +214,12 @@ def _(df, px):
     )
 
     fig_uso
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** La variable average_daily_usage muestra una distribución más o menos uniforme, lo que indica que los niveles de uso diario no se agrupan en una tendencia, sino que se distribuyen de manera equitativa. El boxplot muestra una amplitud significativa sin valores atípicos extremos, lo que sugiere que el consumo o uso diario de los productos es estable en términos generales.""")
     return
 
 
@@ -204,6 +249,12 @@ def _(df, px):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** La variable stock_status muestra una fuerte desproporción: la categoría “3” domina con más de 77 000 registros, mientras que los otros estados son minoritarios""")
+    return
+
+
+@app.cell
 def _(df, px):
     top_10_suppliers = df['supplier_name'].value_counts().nlargest(10).reset_index()
     top_10_suppliers.columns = ['Proveedor', 'Registros']
@@ -224,6 +275,12 @@ def _(df, px):
     )
 
     fig_suppliers
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El gráfico muestra los diez proveedores con mayor número de registros en el dataset. Se observa una distribución bastante homogénea, destacando Banca Privada JWW S.L. y Hnos Raya S.L. como los principales. Esto sugiere una concentración moderada en pocos proveedores, lo cual puede influir en la disponibilidad y frecuencia de productos dentro de las series temporales.""")
     return
 
 
@@ -254,6 +311,12 @@ def _(df, px):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** La relación entre el costo unitario y la cantidad disponible no es lineal, como lo demuestra el diagrama de dispersión. El precio no determina directamente el nivel del stock, dado que los puntos se distribuyen al azar. Esto subraya la importancia de incorporar variables temporales o categóricas adicionales para representar la demanda de manera precisa.""")
+    return
+
+
+@app.cell
 def _(df, px):
     numeric_cols = df.select_dtypes(include=['int64', 'float64'])
 
@@ -275,6 +338,12 @@ def _(df, px):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El mapa de correlación muestra relaciones fuertes entre ciertas variables, como quantity_on_hand y quantity_available (r ≈ 0.99), o entre reorder_point y minimum_stock_level (r ≈ 0.90). Estas correlaciones indican redundancia informativa entre variables relacionadas con el inventario. En contraste, unit_cost y average_daily_usage presentan baja correlación con las demás, sugiriendo independencia y potencial valor predictivo.""")
+    return
+
+
+@app.cell
 def _(df, px):
     # Boxplot: Cantidad Disponible vs. Estado del Stock
     fig_box = px.box(
@@ -287,6 +356,12 @@ def _(df, px):
     )
 
     fig_box
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El boxplot muestra que el estado del stock 3 concentra la mayor cantidad de productos disponibles, con un rango amplio de valores. Los demás estados presentan cantidades muy reducidas. Esto refuerza la desproporción en la variable stock_status detectada previamente y puede requerir normalización o reagrupación antes del modelado.""")
     return
 
 
@@ -308,6 +383,12 @@ def _(df, pd, px):
     )
 
     fig_grouped_bar
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** La distribución del stock por ubicación evidencia una homogeneidad entre los almacenes, con el estado "3" predominando en todos los casos. Esto indica que la administración de inventarios es parecida entre los centros y no hay diferencias operacionales importantes en función de la ubicación, a pesar de que el desbalance general en el estado del stock persiste.""")
     return
 
 
@@ -334,6 +415,12 @@ def _(df, px):
     )
 
     fig_pairplot
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El pairplot permite observar relaciones bivariadas entre variables numéricas clave. Se confirma una fuerte relación entre quantity_on_hand y quantity_available, mientras que unit_cost y average_daily_usage no muestran patrones evidentes. Los colores del estado de stock revelan que la mayoría de registros pertenecen a la clase 3, indicando un sesgo que deberá controlarse en las fases de modelado.""")
     return
 
 
@@ -367,6 +454,12 @@ def _(df, numeric_cols):
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El análisis mediante el rango intercuartílico (IQR) muestra ausencia de outliers en la mayoría de variables numéricas, excepto en total_value (899 valores extremos) y stock_status (2058 registros fuera del rango esperado). Esto indica que, aunque el dataset es consistente, existen valores anómalos en variables relacionadas con el valor total y estado del stock, que podrían afectar la estabilidad del modelo si no se tratan adecuadamente.""")
+    return
+
+
+@app.cell
 def _(df, np, numeric_cols, outliers, zscore):
     threshold = 3 
 
@@ -382,6 +475,12 @@ def _(df, np, numeric_cols, outliers, zscore):
             # print(outliers[[col_2, 'product_name']].sort_values(by=col_2, ascending=False).head())
         else:
             print(f"\nColumna: '{col_2}' -> Sin outliers (Z-score < {threshold}).")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El método del Z-score confirmó la ausencia de valores atípicos en la mayoría de las variables numéricas. Solo se detectaron outliers en total_value (341 casos) y en stock_status (2058 registros), coincidiendo con los resultados obtenidos por el método IQR. Esto refuerza la consistencia general del dataset, pero también evidencia la necesidad de revisar estas dos variables para evitar sesgos en el entrenamiento del modelo.""")
     return
 
 
@@ -446,6 +545,20 @@ def _(df):
 
 @app.cell
 def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - En esta etapa se generaron variables temporales clave como "dia_de_la_semana", "mes", "es_fin_de_semana", "dias_para_vencimiento" y "antiguedad_producto_dias", junto con el indicador ratio_uso_stock.
+    Estas nuevas columnas permitirán que el modelo capture patrones estacionales y cíclicos de demanda, fundamentales para las series temporales. Además, todas las variables fueron correctamente tipadas y sin valores nulos, garantizando calidad en los datos de entrada.
+    - El nuevo DataFrame tiene 79.174 entradas y 11 columnas, sin valores ausentes. Las variables poseen tipos apropiados (int32, int64, float64, datetime64), lo que indica una conversión adecuada de valores numéricos y fechas.
+    Este control garantiza que los datos estén preparados para ser codificados, escalados y utilizados en la creación de secuencias temporales.
+    """
+    )
+    return
+
+
+@app.cell
+def _(mo):
     mo.md(r"""## 3. Codificación y Escalado""")
     return
 
@@ -478,6 +591,17 @@ def _(LabelEncoder, df_feat, joblib, pd):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:** Se aplicó Label Encoding a los identificadores (product_id, supplier_id) para convertirlos en valores numéricos únicos, y One-Hot Encoding para las variables categóricas (warehouse_location, stock_status).
+    Esta combinación preserva la información nominal sin introducir jerarquías falsas, lo que resulta esencial para modelos neuronales que procesan datos categóricos junto con variables continuas.
+    """
+    )
+    return
+
+
+@app.cell
 def _(MinMaxScaler, df_proc, joblib):
     columnas_numericas = [
         'quantity_on_hand', 'quantity_reserved', 'quantity_available',
@@ -496,12 +620,37 @@ def _(MinMaxScaler, df_proc, joblib):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - Mediante el MinMaxScaler, todas las variables numéricas fueron normalizadas al rango [0,1]. Esto facilita la convergencia del modelo y evita que las variables con magnitudes grandes dominen el aprendizaje.
+    - El escalador se guardó con joblib, asegurando su reutilización durante la fase de predicción para mantener la coherencia entre entrenamiento y despliegue.
+    """
+    )
+    return
+
+
+@app.cell
 def _(df_proc):
     print("\nDataFrame Procesado")
     print(df_proc.head())
 
     columnas_modelo = df_proc.select_dtypes(exclude=['object', 'datetime64[ns]']).columns
     print(df_proc[columnas_modelo].info())
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - El DataFrame final integra las variables originales y las transformadas, alcanzando 45 columnas. Se observan variables numéricas escaladas, categóricas codificadas y booleanas derivadas del One-Hot Encoding.
+  
+    - El resultado es un dataset completamente limpio, estructurado y listo para modelado secuencial, cumpliendo con los criterios de la Fase 1 de la guía de práctica
+    """
+    )
     return
 
 
@@ -515,6 +664,12 @@ def _(mo):
 def _(df_feat, df_proc):
     df_proc['created_at'] = df_feat['created_at']
     print("DataFrame 'df_proc' listo para la creación de secuencias.")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""**Análisis:** El DataFrame "df_proc" está totalmente listo para generar secuencias temporales. Se asegura el orden cronológico apropiado para crear ventanas de tiempo que nutran el modelo RNN si se conserva la columna created_at en formato de fecha.""")
     return
 
 
@@ -552,6 +707,18 @@ def _(df_proc):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - La variable objetivo quantity_available se define y se fijan siete pasos temporales (N_STEPS = 7), que corresponden a una semana de observaciones.
+    - Las 30 características elegidas contienen variables numéricas, categóricas codificadas y temporales derivadas, lo cual posibilita la identificación de patrones conductuales en el inventario a través del tiempo.
+    """
+    )
+    return
+
+
+@app.cell
 def _(df_proc):
     print("\nDividiendo en Train y Validation")
 
@@ -568,6 +735,19 @@ def _(df_proc):
     print(f"Set de Validación (Val): {len(val_df)} registros")
     print(f"Corte temporal en: {val_df['created_at'].min()}")
     return train_df, val_df
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - El dataset se ordena cronológicamente por created_at y se divide en 80 % para entrenamiento y 20 % para validación.
+    - El corte temporal garantiza que los datos futuros no influyan en el entrenamiento, manteniendo la coherencia temporal fundamental en series temporales.
+    - El resultado muestra 79 174 registros totales: 63 339 para Train y 15 835 para Validation.
+    """
+    )
+    return
 
 
 @app.cell
@@ -592,6 +772,19 @@ def _(np):
         else:
             return None, None
     return (create_sequences,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - Esta función genera secuencias deslizantes de N_STEPS observaciones previas para cada producto.
+    - Cada ventana temporal contiene los valores de las features definidas y un valor objetivo asociado, lo que transforma los datos tabulares en estructuras tridimensionales
+    - Este formato es indispensable para alimentar modelos RNN, LSTM o GRU en Keras/TensorFlow.
+    """
+    )
+    return
 
 
 @app.cell
@@ -646,6 +839,18 @@ def _(
 
     else:
         print("\nNo hay secuencias.")
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+    - Se utilizó la función create_sequences() para cada producto individualmente, lo que produjo las matrices X_train, y_train, X_val y y_val.
+    - La conclusión revela que los conjuntos poseen la estructura (muestras, 7, 30), lo que confirma 30 variables por observación y 7 pasos temporales.
+    """
+    )
     return
 
 
