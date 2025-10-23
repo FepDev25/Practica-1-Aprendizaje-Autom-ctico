@@ -11,9 +11,12 @@ def _():
     import joblib
     from tensorflow.keras.models import load_model
     import math
+    import marimo as mo
+    return joblib, load_model, mo, np, pd
 
-    print("--- Fase 3: Carga de Artefactos de Producción ---")
 
+@app.cell
+def _(joblib, load_model, pd):
     N_STEPS = 7
     TARGET_COLUMN_INDEX = 2
     NUM_NUMERIC_FEATURES = 18
@@ -69,8 +72,6 @@ def _():
         df_features,
         le_product_id,
         model,
-        np,
-        pd,
         scaler,
     )
 
@@ -86,7 +87,6 @@ def _(mo):
 
     Además se lee `df_processed_features.csv` (79 174 filas) y se fija la lista de `FEATURE_COLUMNS`. 
     Estos objetos garantizan que la inferencia use **exactamente** las mismas transformaciones que en el entrenamiento (consistencia entre train y producción).
-
     """
     )
     return
@@ -173,7 +173,6 @@ def _(mo):
        - Se embebe en un vector “dummy” con `NUM_NUMERIC_FEATURES` para aplicar `inverse_transform` y recuperar unidades reales de `quantity_available` (índice `TARGET_COLUMN_INDEX`).
        - Se trunca a `>= 0` y se retorna el valor en **unidades de stock**.
     Con esto, la función es **determinista y segura** ante entradas no vistas o con historial insuficiente
-
     """
     )
     return
@@ -207,12 +206,6 @@ def _(predict_demand):
     else:
         print(f"Resultado: {prediccion_1}")
     return
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 if __name__ == "__main__":

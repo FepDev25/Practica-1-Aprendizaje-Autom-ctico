@@ -20,6 +20,7 @@ def _():
     from sklearn.metrics import mean_squared_error, mean_absolute_error
     import math
     import joblib
+    import marimo as mo
     return (
         Adam,
         Dense,
@@ -33,6 +34,7 @@ def _():
         math,
         mean_absolute_error,
         mean_squared_error,
+        mo,
         np,
         plt,
         tf,
@@ -116,15 +118,15 @@ def _(Dense, Dropout, GRU, INPUT_SHAPE, Sequential):
 def _(mo):
     mo.md(
         r"""
-      **Resultado:** Nuestro modelo esta compuesto por tres capas:
+    **Resultado:** Nuestro modelo esta compuesto por tres capas:
 
-        - Capa GRU (64 unidades): captura dependencias temporales a lo largo de los 7 pasos temporales.
+      - Capa GRU (64 unidades): captura dependencias temporales a lo largo de los 7 pasos temporales.
 
-        - Capa Dropout (0.2): regulariza el modelo apagando aleatoriamente el 20 % de las neuronas para evitar sobreajuste.
+      - Capa Dropout (0.2): regulariza el modelo apagando aleatoriamente el 20 % de las neuronas para evitar sobreajuste.
 
-        - Capa Densa (1 unidad): produce la predicción continua del nivel de stock (quantity_available).
+      - Capa Densa (1 unidad): produce la predicción continua del nivel de stock (quantity_available).
 
-        El resumen del modelo muestra un total de 18 497 parámetros entrenables, confirmando una arquitectura ligera y eficiente para series de inventario multivariadas.
+      El resumen del modelo muestra un total de 18 497 parámetros entrenables, confirmando una arquitectura ligera y eficiente para series de inventario multivariadas.
     """
     )
     return
@@ -273,9 +275,9 @@ def _(history, plt):
 def _(mo):
     mo.md(
         r"""
-        **Análisis de las gráficas:**
-        1. Los gráficos de error (MAE) y pérdida (MSE) exhiben una caída rápida durante las primeras diez épocas, después de lo cual se estabilizan.
-        2. Los gráficos de pérdida y error muestran que las curvas de entrenamiento y validación convergen hacia valores bajos y estables, lo que refleja un aprendizaje consistente y una buena capacidad de generalización.
+    **Análisis de las gráficas:**
+    1. Los gráficos de error (MAE) y pérdida (MSE) exhiben una caída rápida durante las primeras diez épocas, después de lo cual se estabilizan.
+    2. Los gráficos de pérdida y error muestran que las curvas de entrenamiento y validación convergen hacia valores bajos y estables, lo que refleja un aprendizaje consistente y una buena capacidad de generalización.
     """
     )
     return
@@ -357,16 +359,10 @@ def _(mo):
     mo.md(
         r"""
     **Resultados:**
-    En promedio, el modelo se equivoca en alrededor de ±190 unidades de stock, lo que representa un desempeño aceptable para predicciones de demanda o niveles de inventario con alto volumen de movimiento.
+    En promedio, el modelo se equivoca en alrededor de ±0.03 unidades de stock, lo que representa un desempeño muy bueno para predicciones de demanda o niveles de inventario con alto volumen de movimiento.
     """
     )
     return
-
-
-@app.cell
-def _():
-    import marimo as mo
-    return (mo,)
 
 
 if __name__ == "__main__":

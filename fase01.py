@@ -564,11 +564,6 @@ def _(mo):
 
 
 @app.cell
-def _():
-    return
-
-
-@app.cell
 def _(LabelEncoder, df_feat, joblib, pd):
     df_proc = df_feat.copy()
 
