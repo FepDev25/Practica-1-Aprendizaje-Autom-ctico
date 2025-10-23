@@ -1,8 +1,6 @@
----
-title: Fase03
-marimo-version: 0.17.0
-width: medium
----
+# Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
+
+## Fase 3: Predicciones
 
 ```python {.marimo}
 import pandas as pd
@@ -135,31 +133,48 @@ Flujo de inferencia:
    - Se embebe en un vector “dummy” con `NUM_NUMERIC_FEATURES` para aplicar `inverse_transform` y recuperar unidades reales de `quantity_available` (índice `TARGET_COLUMN_INDEX`).
    - Se trunca a `>= 0` y se retorna el valor en **unidades de stock**.
 Con esto, la función es **determinista y segura** ante entradas no vistas o con historial insuficiente
+<!---->
+- Ahora se leerá el dataset de inventario y mediante un bucle se irán realizando las predicciones para diferentes productos.
 
 ```python {.marimo}
-print("Prueba 1:")
-TEST_ID = 'PROD-00136830'
-TEST_DATE = '2025-10-31'
+df_original = pd.read_csv('dataset_inventario_secuencial_completo.csv')
+unique_products = df_original['product_id'].unique()
 
-prediccion_1 = predict_demand(TEST_ID, TEST_DATE)
-print(f"\nPredicción para {TEST_ID} el {TEST_DATE}:")
+NUM_PRODUCTS = 15
+TARGET_DATE = '2025-10-31'
 
-if isinstance(prediccion_1, (int, float)):
-    print(f"Stock predicho: {prediccion_1:.2f} unidades")
-else:
-    print(f"Resultado: {prediccion_1}")
+np.random.seed(42)
+sample_products = np.random.choice(unique_products, 
+                                   size=min(NUM_PRODUCTS, len(unique_products)), 
+                                   replace=False)
 
-print()
+print(f"PREDICCIONES PARA {len(sample_products)} PRODUCTOS ÚNICOS")
+print(f"Fecha objetivo: {TARGET_DATE}")
 
-print("Prueba 2:")
-TEST_ID = 'PROD-023D0E26'
-TEST_DATE = '2025-10-31'
+results = []
+success_count = 0
 
-prediccion_1 = predict_demand(TEST_ID, TEST_DATE)
-print(f"\nPredicción para {TEST_ID} el {TEST_DATE}:")
+for idx, product_id in enumerate(sample_products, 1):
+    print(f"\n[{idx}/{len(sample_products)}] {product_id}")
 
-if isinstance(prediccion_1, (int, float)):
-    print(f"Stock predicho: {prediccion_1:.2f} unidades")
-else:
-    print(f"Resultado: {prediccion_1}")
+    prediction = predict_demand(product_id, TARGET_DATE)
+
+    if isinstance(prediction, (int, float)):
+        success_count += 1
+        print(f"Stock predicho: {prediction:.2f} unidades")
+        results.append({'product_id': product_id, 'prediction': prediction, 'status': 'success'})
+    else:
+        print(f"{prediction}")
+        results.append({'product_id': product_id, 'prediction': None, 'status': 'failed'})
+
+# Resumen
+results_df = pd.DataFrame(results)
+
+if success_count > 0:
+    successful = results_df[results_df['status'] == 'success']['prediction']
+    print(f"\nEstadísticas:")
+    print(f"   Media: {successful.mean():.2f} unidades")
+    print(f"   Mediana: {successful.median():.2f} unidades")
+    print(f"   Mínimo: {successful.min():.2f} unidades")
+    print(f"   Máximo: {successful.max():.2f} unidades")
 ```

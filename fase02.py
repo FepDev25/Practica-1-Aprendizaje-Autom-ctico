@@ -42,6 +42,12 @@ def _():
 
 
 @app.cell
+def _(mo):
+    mo.md(r"""## Entrenamiento del modelo""")
+    return
+
+
+@app.cell
 def _(np, tf):
     np.random.seed(42)
     tf.random.set_seed(42)
@@ -297,7 +303,7 @@ def _(X_val, load_model, math, mean_absolute_error, mean_squared_error, y_val):
     print(f"Métricas del Modelo (en datos escalados [0, 1]):")
     print(f"RMSE: {rmse_scaled:.4f}")
     print(f"MAE:  {mae_scaled:.4f}")
-    return (y_pred_scaled,)
+    return mae_scaled, rmse_scaled, y_pred_scaled
 
 
 @app.cell
@@ -319,10 +325,12 @@ def _(mo):
 @app.cell
 def _(
     joblib,
+    mae_scaled,
     math,
     mean_absolute_error,
     mean_squared_error,
     np,
+    rmse_scaled,
     y_pred_scaled,
     y_val,
 ):
@@ -332,7 +340,7 @@ def _(
 
     TARGET_COLUMN_INDEX = 2 
 
-    num_numeric_features = 18 # Revisa este número si es diferente
+    num_numeric_features = 18 
 
     dummy_y_val = np.zeros((len(y_val), num_numeric_features))
     dummy_y_val[:, TARGET_COLUMN_INDEX] = y_val.ravel() # .ravel() lo aplana
@@ -342,16 +350,37 @@ def _(
     dummy_y_pred[:, TARGET_COLUMN_INDEX] = y_pred_scaled.ravel()
     y_pred_real = scaler.inverse_transform(dummy_y_pred)[:, TARGET_COLUMN_INDEX]
 
-    # 3. Calcular métricas finales en unidades reales de stock
+    # Calcular métricas finales en unidades reales de stock
     rmse_real = math.sqrt(mean_squared_error(y_val_real, y_pred_real))
     mae_real = mean_absolute_error(y_val_real, y_pred_real)
 
-    print("\nMétricas Finales")
-    print(f"RMSE (unidades reales): {rmse_real:.2f} unidades")
-    print(f"MAE (unidades reales):  {mae_real:.2f} unidades")
-    print("\nInterpretación del MAE:")
-    print(f"En promedio, las predicciones del modelo se equivocan por +/- {mae_real:.2f} unidades de stock.")
-    return
+    # Obtener el rango de valores reales para contexto
+    min_stock = scaler.data_min_[TARGET_COLUMN_INDEX]
+    max_stock = scaler.data_max_[TARGET_COLUMN_INDEX]
+    rango_stock = max_stock - min_stock
+
+    # Error relativo porcentual
+    error_relativo = (mae_real / rango_stock) * 100
+
+    print("MÉTRICAS FINALES DEL MODELO")
+    print(f"\nContexto del Dataset:")
+    print(f"   • Rango de stock: {min_stock:.0f} - {max_stock:.0f} unidades")
+    print(f"   • Rango total: {rango_stock:.0f} unidades")
+
+    print(f"\nMétricas en Escala Normalizada [0,1]:")
+    print(f"   • RMSE: {rmse_scaled:.4f}")
+    print(f"   • MAE:  {mae_scaled:.4f}")
+
+    print(f"\nMétricas en Unidades Reales:")
+    print(f"   • RMSE: {rmse_real:.2f} unidades")
+    print(f"   • MAE:  {mae_real:.2f} unidades")
+    print(f"   • Error Relativo: {error_relativo:.2f}%")
+
+    print(f"\nInterpretación:")
+    print(f"   En promedio, las predicciones se desvían ±{mae_real:.2f} unidades,")
+    print(f"   lo que representa un error del {error_relativo:.2f}% respecto al rango total.")
+    print(f"   Esto es equivalente a un MAE normalizado de {mae_scaled:.4f}.")
+    return error_relativo, mae_real, rmse_real, y_pred_real, y_val_real
 
 
 @app.cell
@@ -359,9 +388,252 @@ def _(mo):
     mo.md(
         r"""
     **Resultados:**
-    En promedio, el modelo se equivoca en alrededor de ±0.03 unidades de stock, lo que representa un desempeño muy bueno para predicciones de demanda o niveles de inventario con alto volumen de movimiento.
+    El modelo tiene un rendimiento excelente. Con un error relativo del ~3%, 
+    las predicciones son altamente precisas considerando el rango completo del inventario.
+    El MAE de ~193 unidades sobre un rango de 6435 unidades es equivalente 
+    al MAE normalizado de 0.03 en escala [0,1].
     """
     )
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""## Análisis de rendimiento""")
+    return
+
+
+@app.cell
+def _(plt, y_pred_real, y_val_real):
+    plt.figure(figsize=(14, 6))
+
+    # Scatter plot de predicciones vs reales
+    plt.subplot(1, 2, 1)
+    plt.scatter(y_val_real, y_pred_real, alpha=0.3, s=10, edgecolors='none', color='steelblue')
+
+    # Línea diagonal perfecta
+    min_val = min(y_val_real.min(), y_pred_real.min())
+    max_val = max(y_val_real.max(), y_pred_real.max())
+    plt.plot([min_val, max_val], [min_val, max_val], 'r--', linewidth=2, label='Predicción Perfecta')
+
+    plt.xlabel('Valor Real (unidades)', fontsize=11)
+    plt.ylabel('Valor Predicho (unidades)', fontsize=11)
+    plt.title('Predicciones vs Valores Reales', fontsize=12, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3)
+
+    # Histograma comparativo
+    plt.subplot(1, 2, 2)
+    plt.hist(y_val_real, bins=50, alpha=0.5, label='Valores Reales', color='blue', edgecolor='black')
+    plt.hist(y_pred_real, bins=50, alpha=0.5, label='Predicciones', color='orange', edgecolor='black')
+    plt.xlabel('Stock (unidades)', fontsize=11)
+    plt.ylabel('Frecuencia', fontsize=11)
+    plt.title('Distribución: Real vs Predicho', fontsize=12, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.show()
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    - Los puntos forman una nube alargada que sigue de cerca la línea roja. Significa que el modelo ha aprendido la tendencia general de los datos.
+    - Sin embargo, el modelo no refleja la distribución real. Las dos formas de distribución son bastante diferentes. Los datos reales (azules) tienen varios "picos" o modas. Las predicciones (naranja), son más "suaves" y centradas, con un gran pico alrededor de 4500 que no existe en los datos reales.
+    """
+    )
+    return
+
+
+@app.cell
+def _(np, plt, y_pred_real, y_val_real):
+    errors = y_pred_real - y_val_real
+    abs_errors = np.abs(errors)
+    percent_errors = (abs_errors / (y_val_real + 1)) * 100
+
+    plt.figure(figsize=(15, 5))
+
+    # Subplot 1: Histograma de errores (con signo)
+    plt.subplot(1, 3, 1)
+    plt.hist(errors, bins=50, color='steelblue', edgecolor='black', alpha=0.7)
+    plt.axvline(x=0, color='red', linestyle='--', linewidth=2, label='Error = 0')
+    plt.axvline(x=np.mean(errors), color='green', linestyle='--', linewidth=2, 
+                label=f'Media = {np.mean(errors):.2f}')
+    plt.xlabel('Error (Predicción - Real)', fontsize=11)
+    plt.ylabel('Frecuencia', fontsize=11)
+    plt.title('Distribución de Errores', fontsize=12, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3, axis='y')
+
+    # Subplot 2: Histograma de errores absolutos
+    plt.subplot(1, 3, 2)
+    plt.hist(abs_errors, bins=50, color='coral', edgecolor='black', alpha=0.7)
+    plt.axvline(x=np.mean(abs_errors), color='darkred', linestyle='--', linewidth=2, 
+                label=f'MAE = {np.mean(abs_errors):.2f}')
+    plt.xlabel('Error Absoluto (unidades)', fontsize=11)
+    plt.ylabel('Frecuencia', fontsize=11)
+    plt.title('Distribución de Errores Absolutos', fontsize=12, fontweight='bold')
+    plt.legend()
+    plt.grid(True, alpha=0.3, axis='y')
+
+    # Subplot 3: Boxplot de errores absolutos
+    plt.subplot(1, 3, 3)
+    box = plt.boxplot(abs_errors, vert=True, patch_artist=True, 
+                      boxprops=dict(facecolor='lightgreen', alpha=0.7))
+    plt.ylabel('Error Absoluto (unidades)', fontsize=11)
+    plt.title('Boxplot de Errores Absolutos', fontsize=12, fontweight='bold')
+    plt.grid(True, alpha=0.3, axis='y')
+
+    # Añadir estadísticas
+    q1, median, q3 = np.percentile(abs_errors, [25, 50, 75])
+    plt.text(1.15, median, f'Mediana: {median:.1f}', fontsize=9, va='center')
+    plt.text(1.15, q1, f'Q1: {q1:.1f}', fontsize=9, va='center')
+    plt.text(1.15, q3, f'Q3: {q3:.1f}', fontsize=9, va='center')
+
+    plt.tight_layout()
+    plt.show()
+    return abs_errors, percent_errors
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    - El modelo es imparcial (unbiased). No tiene una tendencia sistemática a sobreestimar o subestimar el stock. Comete tantos errores pequeños por encima como por debajo.
+    - El modelo es extremadamente preciso. La gran mayoría de las predicciones tienen un error minúsculo. El MAE de 0.03 (en una escala de 0 a 1) es un resultado sobresaliente.
+    - En general (el 50% de las veces), el modelo se equivoca por un valor entre 73.6 y 293.5 unidades, con un error "promedio" (mediana) de 161.8.
+    - Sin embargo, el modelo es inconsistente. Aunque normalmente funciona dentro de un rango aceptable (la caja), con frecuencia produce predicciones muy alejadas de su valor real.
+    """
+    )
+    return
+
+
+@app.cell
+def _(abs_errors, np, plt, y_val_real):
+    percentiles = [0, 33, 66, 100]
+    bins = np.percentile(y_val_real, percentiles)
+
+    stock_ranges = ['Bajo (0-33%)', 'Medio (33-66%)', 'Alto (66-100%)']
+    range_indices = [
+        (y_val_real >= bins[0]) & (y_val_real < bins[1]),
+        (y_val_real >= bins[1]) & (y_val_real < bins[2]),
+        (y_val_real >= bins[2])
+    ]
+
+    # Calcular métricas por rango
+    print("ANÁLISIS DE RENDIMIENTO POR RANGO DE STOCK")
+
+    range_stats = []
+    for i, (range_name, indices) in enumerate(zip(stock_ranges, range_indices)):
+        range_errors = abs_errors[indices]
+        range_vals = y_val_real[indices]
+
+        mae_range = np.mean(range_errors)
+        count = indices.sum()
+        pct = (count / len(y_val_real)) * 100
+
+        range_stats.append({
+            'name': range_name,
+            'count': count,
+            'percentage': pct,
+            'mae': mae_range,
+            'median_error': np.median(range_errors),
+            'std_error': range_errors.std(),
+            'min_stock': range_vals.min(),
+            'max_stock': range_vals.max()
+        })
+
+        print(f"\n{range_name}:")
+        print(f"   • Rango: [{range_vals.min():.0f} - {range_vals.max():.0f}] unidades")
+        print(f"   • Cantidad de muestras: {count:,} ({pct:.1f}%)")
+        print(f"   • MAE: {mae_range:.2f} unidades")
+        print(f"   • Error mediano: {np.median(range_errors):.2f} unidades")
+        print(f"   • Desviación estándar: {range_errors.std():.2f} unidades")
+
+
+    # Visualización por rangos
+    plt.figure(figsize=(15, 5))
+
+    # Gráfico 1: MAE por rango
+    plt.subplot(1, 3, 1)
+    maes = [stat['mae'] for stat in range_stats]
+    colors = ['#ff6b6b', '#ffd93d', '#6bcf7f']
+    bars = plt.bar(stock_ranges, maes, color=colors, edgecolor='black', alpha=0.7)
+    plt.ylabel('MAE (unidades)', fontsize=11)
+    plt.title('Error Absoluto Medio por Rango', fontsize=12, fontweight='bold')
+    plt.xticks(rotation=15, ha='right')
+    plt.grid(True, alpha=0.3, axis='y')
+
+    for bar, mae_iter in zip(bars, maes):
+        height = bar.get_height()
+        plt.text(bar.get_x() + bar.get_width()/2., height,
+                f'{mae_iter:.1f}', ha='center', va='bottom', fontweight='bold')
+
+    # Gráfico 2: Distribución de muestras
+    plt.subplot(1, 3, 2)
+    counts = [stat['count'] for stat in range_stats]
+    plt.pie(counts, labels=stock_ranges, autopct='%1.1f%%', colors=colors, startangle=90,
+            wedgeprops={'edgecolor': 'black', 'linewidth': 1.5})
+    plt.title('Distribución de Muestras por Rango', fontsize=12, fontweight='bold')
+
+    # Gráfico 3: Boxplot comparativo
+    plt.subplot(1, 3, 3)
+    error_data = [abs_errors[indices] for indices in range_indices]
+    box_i = plt.boxplot(error_data, labels=['Bajo', 'Medio', 'Alto'], 
+                      patch_artist=True, notch=True)
+
+    for patch, color in zip(box_i['boxes'], colors):
+        patch.set_facecolor(color)
+        patch.set_alpha(0.7)
+
+    plt.ylabel('Error Absoluto (unidades)', fontsize=11)
+    plt.xlabel('Rango de Stock', fontsize=11)
+    plt.title('Distribución de Errores por Rango', fontsize=12, fontweight='bold')
+    plt.grid(True, alpha=0.3, axis='y')
+
+    plt.tight_layout()
+    plt.show()
+    return (range_stats,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    - El error de el modelo aumenta a medida que aumenta el valor del stock.
+    - El modelo es bueno prediciendo stocks bajos, regular prediciendo stocks medios, e inconsistente prediciendo stocks altos.
+    """
+    )
+    return
+
+
+@app.cell
+def _(error_relativo, mae_real, percent_errors, range_stats, rmse_real):
+    print("ANÁLISIS DE RENDIMIENTO DEL MODELO")
+
+    print("\nMÉTRICAS GLOBALES:")
+    print(f"   • MAE: {mae_real:.2f} unidades ({error_relativo:.2f}% del rango)")
+    print(f"   • RMSE: {rmse_real:.2f} unidades")
+    print(f"   • Ratio RMSE/MAE: {rmse_real/mae_real:.2f}")
+
+    print("\nDISTRIBUCIÓN DE CALIDAD:")
+    excellent = (percent_errors < 5).sum()
+    good = ((percent_errors >= 5) & (percent_errors < 10)).sum()
+    fair = ((percent_errors >= 10) & (percent_errors < 20)).sum()
+    poor = (percent_errors >= 20).sum()
+    total = len(percent_errors)
+
+    print(f"   • Excelente (<5% error):  {excellent:,} predicciones ({excellent/total*100:.1f}%)")
+    print(f"   • Bueno (5-10% error):    {good:,} predicciones ({good/total*100:.1f}%)")
+    print(f"   • Aceptable (10-20%):     {fair:,} predicciones ({fair/total*100:.1f}%)")
+    print(f"   • Necesita mejora (>20%): {poor:,} predicciones ({poor/total*100:.1f}%)")
+
+    print("\nRENDIMIENTO POR RANGO DE STOCK:")
+    for stat in range_stats:
+        print(f"   • {stat['name']:15} → MAE: {stat['mae']:6.2f} unidades ({stat['percentage']:5.1f}% de datos)")
     return
 
 

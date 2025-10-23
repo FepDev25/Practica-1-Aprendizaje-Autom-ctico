@@ -1,11 +1,7 @@
----
-title: Fase01
-marimo-version: 0.17.0
-width: medium
----
-
 # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
-##Fase 1: Análisis y Preparación del Dataset
+
+## Fase 1: Análisis y Preparación del Dataset
+
 **Nombres:** Felipe Peralta y Samantha Suquilanda
 
 ```python {.marimo}
@@ -74,6 +70,7 @@ df.info()
 ```
 
 **Análisis de los Resultados:**
+
 - Hay 79173 entradas (filas) y 28 columnas (features).
 
 - Hallazgo Crítico: existen 16 columnas de tipo object. Python usa object para texto (strings). Damos énfasis a las columnas created_at, last_order_date, last_stock_count_date y expiration_date, que están listados como "object".
@@ -400,6 +397,7 @@ print(df_feat[columnas_a_mostrar].info())
 ```
 
 **Análisis:**
+
 - En esta etapa se generaron variables temporales clave como "dia_de_la_semana", "mes", "es_fin_de_semana", "dias_para_vencimiento" y "antiguedad_producto_dias", junto con el indicador ratio_uso_stock.
 Estas nuevas columnas permitirán que el modelo capture patrones estacionales y cíclicos de demanda, fundamentales para las series temporales. Además, todas las variables fueron correctamente tipadas y sin valores nulos, garantizando calidad en los datos de entrada.
 - El nuevo DataFrame tiene 79.174 entradas y 11 columnas, sin valores ausentes. Las variables poseen tipos apropiados (int32, int64, float64, datetime64), lo que indica una conversión adecuada de valores numéricos y fechas.
@@ -447,6 +445,7 @@ print("\nEscalar Variables Numéricas")
 ```
 
 **Análisis:**
+
 - Mediante el MinMaxScaler, todas las variables numéricas fueron normalizadas al rango [0,1]. Esto facilita la convergencia del modelo y evita que las variables con magnitudes grandes dominen el aprendizaje.
 - El escalador se guardó con joblib, asegurando su reutilización durante la fase de predicción para mantener la coherencia entre entrenamiento y despliegue.
 
@@ -459,6 +458,7 @@ print(df_proc[columnas_modelo].info())
 ```
 
 **Análisis:**
+
 - El DataFrame final integra las variables originales y las transformadas, alcanzando 45 columnas. Se observan variables numéricas escaladas, categóricas codificadas y booleanas derivadas del One-Hot Encoding.
 
 - El resultado es un dataset completamente limpio, estructurado y listo para modelado secuencial, cumpliendo con los criterios de la Fase 1 de la guía de práctica
@@ -504,6 +504,7 @@ if TARGET_COLUMN not in FEATURE_COLUMNS:
 ```
 
 **Análisis:**
+
 - La variable objetivo quantity_available se define y se fijan siete pasos temporales (N_STEPS = 7), que corresponden a una semana de observaciones.
 - Las 30 características elegidas contienen variables numéricas, categóricas codificadas y temporales derivadas, lo cual posibilita la identificación de patrones conductuales en el inventario a través del tiempo.
 
@@ -525,6 +526,7 @@ print(f"Corte temporal en: {val_df['created_at'].min()}")
 ```
 
 **Análisis:**
+
 - El dataset se ordena cronológicamente por created_at y se divide en 80 % para entrenamiento y 20 % para validación.
 - El corte temporal garantiza que los datos futuros no influyan en el entrenamiento, manteniendo la coherencia temporal fundamental en series temporales.
 - El resultado muestra 79 174 registros totales: 63 339 para Train y 15 835 para Validation.
@@ -552,6 +554,7 @@ def create_sequences(data_df, product_group, n_steps, feature_cols, target_col):
 ```
 
 **Análisis:**
+
 - Esta función genera secuencias deslizantes de N_STEPS observaciones previas para cada producto.
 - Cada ventana temporal contiene los valores de las features definidas y un valor objetivo asociado, lo que transforma los datos tabulares en estructuras tridimensionales
 - Este formato es indispensable para alimentar modelos RNN, LSTM o GRU en Keras/TensorFlow.
@@ -602,6 +605,7 @@ else:
 ```
 
 **Análisis:**
+
 - Se utilizó la función create_sequences() para cada producto individualmente, lo que produjo las matrices X_train, y_train, X_val y y_val.
 - La conclusión revela que los conjuntos poseen la estructura (muestras, 7, 30), lo que confirma 30 variables por observación y 7 pasos temporales.
 
