@@ -74,6 +74,20 @@ def _(np, tf):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Resultado:**
+        - Se cargan los archivos X_train.npy, y_train.npy, X_val.npy y y_val.npy, previamente generados en la Fase 1.
+        - Todos los arreglos se convierten al tipo float32, formato compatible con TensorFlow y más eficiente en memoria.
+        - La verificación de formas confirma que las matrices mantienen la estructura esperada (muestras, pasos, características) para X y (muestras,) para y.
+        - El modelo va a trabajar con un INPUT_SHAPE de (7, 30), equivalente a una ventana de 7 días con 30 variables predictoras.
+    """
+    )
+    return
+
+
+@app.cell
 def _(Dense, Dropout, GRU, INPUT_SHAPE, Sequential):
     # Arquitectura del Modelo (GRU)
 
@@ -96,6 +110,24 @@ def _(Dense, Dropout, GRU, INPUT_SHAPE, Sequential):
     model_gru.summary()
     model = model_gru
     return (model,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+      **Resultado:** Nuestro modelo esta compuesto por tres capas:
+
+        - Capa GRU (64 unidades): captura dependencias temporales a lo largo de los 7 pasos temporales.
+
+        - Capa Dropout (0.2): regulariza el modelo apagando aleatoriamente el 20 % de las neuronas para evitar sobreajuste.
+
+        - Capa Densa (1 unidad): produce la predicción continua del nivel de stock (quantity_available).
+
+        El resumen del modelo muestra un total de 18 497 parámetros entrenables, confirmando una arquitectura ligera y eficiente para series de inventario multivariadas.
+    """
+    )
+    return
 
 
 @app.cell
@@ -138,6 +170,27 @@ def _(Adam, EarlyStopping, ModelCheckpoint, model):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis:**
+        - El modelo se compila con el optimizador Adam 
+        - Se utiliza la función de pérdida Error Cuadrático Medio (MSE) y la métrica Error Absoluto Medio (MAE)
+        - Estas métricas permiten medir tanto la precisión como la estabilidad del modelo frente a valores extremos
+
+        **Parte 2:**
+        - Se configuran dos callbacks esenciales:
+
+          - ModelCheckpoint: guarda el modelo solo cuando alcanza su mejor desempeño en validación
+          - EarlyStopping: detiene el entrenamiento si no hay mejora después de 10 épocas, evitando sobreentrenamiento.
+
+            Esto garantiza una ejecución eficiente y con control automático de convergencia.
+    """
+    )
+    return
+
+
+@app.cell
 def _(X_train, X_val, early_stopping, model, model_checkpoint, y_train, y_val):
     # Entrenar el Modelo
 
@@ -156,6 +209,31 @@ def _(X_train, X_val, early_stopping, model, model_checkpoint, y_train, y_val):
 
     print("Entrenado")
     return (history,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Análisis del Resultado:**
+    Se entrenó el modelo con:
+
+    - Épocas máximas: 100
+
+    - Tamaño de batch: 64
+
+    - Parada temprana: época 53
+
+    Resultados finales:
+
+    - loss: 0.0035
+
+    - mean_absolute_error: 0.0443
+
+    El modelo mostró una convergencia estable y rápida, estabilizando las métricas después de las primeras 10 épocas sin evidencias de sobreajuste.
+    """
+    )
+    return
 
 
 @app.cell
@@ -192,6 +270,18 @@ def _(history, plt):
 
 
 @app.cell
+def _(mo):
+    mo.md(
+        r"""
+        **Análisis de las gráficas:**
+        1. Los gráficos de error (MAE) y pérdida (MSE) exhiben una caída rápida durante las primeras diez épocas, después de lo cual se estabilizan.
+        2. Los gráficos de pérdida y error muestran que las curvas de entrenamiento y validación convergen hacia valores bajos y estables, lo que refleja un aprendizaje consistente y una buena capacidad de generalización.
+    """
+    )
+    return
+
+
+@app.cell
 def _(X_val, load_model, math, mean_absolute_error, mean_squared_error, y_val):
     best_model = load_model('best_model.keras')
 
@@ -206,6 +296,22 @@ def _(X_val, load_model, math, mean_absolute_error, mean_squared_error, y_val):
     print(f"RMSE: {rmse_scaled:.4f}")
     print(f"MAE:  {mae_scaled:.4f}")
     return (y_pred_scaled,)
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    Sobre los datos normalizados [0, 1]:
+
+    - RMSE: 0.0422
+
+    - MAE: 0.0296
+
+    Estos valores confirman un error promedio muy bajo dentro del rango de los datos escalados.
+    """
+    )
+    return
 
 
 @app.cell
@@ -244,6 +350,23 @@ def _(
     print("\nInterpretación del MAE:")
     print(f"En promedio, las predicciones del modelo se equivocan por +/- {mae_real:.2f} unidades de stock.")
     return
+
+
+@app.cell
+def _(mo):
+    mo.md(
+        r"""
+    **Resultados:**
+    En promedio, el modelo se equivoca en alrededor de ±190 unidades de stock, lo que representa un desempeño aceptable para predicciones de demanda o niveles de inventario con alto volumen de movimiento.
+    """
+    )
+    return
+
+
+@app.cell
+def _():
+    import marimo as mo
+    return (mo,)
 
 
 if __name__ == "__main__":
