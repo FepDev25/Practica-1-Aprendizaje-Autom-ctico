@@ -1,14 +1,15 @@
 # Tarea de Investigación
+
 - **Nombres:** Felipe Peralta y Samantha Suquilanda
 - **Fecha:** Cuenca, 22 de octubre 2025
 
-# Parte 1: Estimación del Mercado Laboral Tech en Ecuador (Expandido)
+## Parte 1: Estimación del Mercado Laboral Tech en Ecuador (Expandido)
 
 A continuación, se presenta una tabla detallada con estimaciones de salarios, responsabilidades y tecnologías clave para roles de tecnología en Ecuador.
 
 **Nota:**
-* Los salarios son estimaciones para roles de nivel **Intermedio**
 
+- Los salarios son estimaciones para roles de nivel **Intermedio**
 
 ---
 
@@ -24,16 +25,17 @@ A continuación, se presenta una tabla detallada con estimaciones de salarios, r
 
 ### Observaciones
 
-1.  **Roles de Datos (Data/ML/AI):** Los frameworks como (**Scikit-learn**, **TensorFlow**, **Keras**, **MLflow**, **Kubeflow**) son el estándar de la industria.
-    * **Scikit-learn:** Usado por casi todos para ML clásico.
-    * **TensorFlow/Keras:** Dominantes en Deep Learning (junto con PyTorch).
-    * **MLflow/Kubeflow:** Son herramientas de MLOps (Machine Learning Operations) para gestionar el ciclo de vida del modelo, siendo cruciales para los ML Engineers.
-2.  **Demanda en Ecuador:** La demanda local de AI/ML Engineers puros es baja y se concentra en *startups* de tecnología o centros de innovación de grandes empresas. Sin embargo, la demanda de *Data Engineers* está creciendo muy rápido.
-3.  **El Factor Remoto:** Los salarios para todos estos roles se disparan si el profesional trabaja de forma remota para empresas de EE. UU. o Europa, pudiendo fácilmente duplicar o triplicar las cifras anuales mostradas.
+1. **Roles de Datos (Data/ML/AI):** Los frameworks como (**Scikit-learn**, **TensorFlow**, **Keras**, **MLflow**, **Kubeflow**) son el estándar de la industria.
+    - **Scikit-learn:** Usado por casi todos para ML clásico.
+    - **TensorFlow/Keras:** Dominantes en Deep Learning (junto con PyTorch).
+    - **MLflow/Kubeflow:** Son herramientas de MLOps (Machine Learning Operations) para gestionar el ciclo de vida del modelo, siendo cruciales para los ML Engineers.
+2. **Demanda en Ecuador:** La demanda local de AI/ML Engineers puros es baja y se concentra en *startups* de tecnología o centros de innovación de grandes empresas. Sin embargo, la demanda de *Data Engineers* está creciendo muy rápido.
+3. **El Factor Remoto:** Los salarios para todos estos roles se disparan si el profesional trabaja de forma remota para empresas de EE. UU. o Europa, pudiendo fácilmente duplicar o triplicar las cifras anuales mostradas.
 
 ---
 
 ### Importancia de Roles: Data Engineer y Feature Engineer
+
 Es primordial conocer sobre los conceptos básicos del tema, antes de poder aplicarlo y resolver el Query.
 
  1. **Ingeniería de Características (Feature Engineering / FE):**
@@ -44,11 +46,13 @@ es el proceso de usar el conocimiento del dominio para transformar datos crudos 
     1. Creación de características: crear nuevas variables a partir de las existentes. Ejemplo: Del dato fecha_construccion: Puedes crear antiguedad_casa (Año actual - fecha_construccion).
     2. Transformación y limpieza: Los modelos matemáticos necesitan números limpios y en formatos específicos. Ejemplo: Codificación (Encoding): Convertir texto a números.
     3. Selección de características: Después de crear docenas o cientos de características, debes eliminar las que no aportan información (ruido) o las que son redundantes.
+
 2. **Data Engineer:** Es el **habilitador** clave. No suele diseñar el modelo de similaridad, pero es responsable de construir y mantener el *pipeline* de datos que:
-    * Genera millones de embeddings (que es costoso).
-    * Los almacena y optimiza en bases de datos especializadas (como *Vector Databases*) para que el AI Engineer pueda hacer consultas de similaridad en milisegundos.
+    - Genera millones de embeddings (que es costoso).
+    - Los almacena y optimiza en bases de datos especializadas (como *Vector Databases*) para que el AI Engineer pueda hacer consultas de similaridad en milisegundos.
 
 ---
+
 ### Conceptos Clave
 
 **Similaridad Coseno:** mide el ángulo entre dos vectores.
@@ -61,9 +65,9 @@ es el proceso de usar el conocimiento del dominio para transformar datos crudos 
 
 ---
 
-
 ### Ejercicio a Resolver
-**Query:** comparar el significado de "dame el total de la factura IQ5430" con el significado de las funciones: 
+
+**Query:** comparar el significado de "dame el total de la factura IQ5430" con el significado de las funciones:
 
     - Funcion_1: "find_invoice"
 
@@ -73,15 +77,16 @@ es el proceso de usar el conocimiento del dominio para transformar datos crudos 
 
 - **Análisis:** es un problema clásico de llamada a funciones (function calling) en sistemas de IA.
 
-    - **Parte 1:** La medida que necesitamos no es una simple, sino una combinación de dos técnicas:
+  - **Parte 1:** La medida que necesitamos no es una simple, sino una combinación de dos técnicas:
 
         1. Embeddings (Vectores de Significado)
 
         2. Similaridad Coseno (Cosine Similarity)
 
-La medida de similaridad por sí sola no funciona con texto crudo. Primero debemos convertir el query y funciones a un formato numérico que entienda de significado (Transformación y limpieza). 
+La medida de similaridad por sí sola no funciona con texto crudo. Primero debemos convertir el query y funciones a un formato numérico que entienda de significado (Transformación y limpieza).
 
 - **Pasos Para Resolver**
+
 1. **Vectorización (Crear Embeddings):** primero debemos "vectorizar" (crear embeddings) tanto para el query como las funciones.
 
     - Un embedding es un vector de números que representa el significado semántico del texto.
@@ -132,5 +137,6 @@ La medida de similaridad por sí sola no funciona con texto crudo. Primero debem
 
         3. find_user (Score: 0.15)
 
-### Conclusión: 
+### Conclusión
+
 Con seguridad decimos que la función que se debe llamar es **find_invoice**
