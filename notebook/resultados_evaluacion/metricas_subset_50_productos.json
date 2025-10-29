@@ -1,0 +1,23 @@
+{
+  "experimento": "subset_50_productos",
+  "fecha": "2025-10-29 00:36:23",
+  "total_filas": 1550,
+  "productos_unicos": 50,
+  "secuencias_train": 960,
+  "secuencias_val": 240,
+  "epocas_entrenadas": 27,
+  "rmse_scaled": 0.09312644854961512,
+  "mae_scaled": 0.0777982547879219,
+  "rmse_real": 580.4571586952036,
+  "mae_real": 484.9165505977599,
+  "min_stock": 0.0,
+  "max_stock": 6233.0,
+  "rango_stock": 6233.0,
+  "error_relativo_pct": 7.779825936110379,
+  "tiempo_carga": 0.006433010101318359,
+  "tiempo_preprocesamiento": 0.012535572052001953,
+  "tiempo_secuencias": 0.05476522445678711,
+  "tiempo_entrenamiento": 3.6713459491729736,
+  "tiempo_evaluacion": 0.22021937370300293,
+  "tiempo_total": 3.965881824493408
+}

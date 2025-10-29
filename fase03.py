@@ -11,26 +11,26 @@ def _(mo):
     # Practica 1: APRENDIZAJE PROFUNDO Y SERIES TEMPORALES
     ## Fase 3: Función de Predicción y Preparación para Despliegue
     **Nombres:** Felipe Peralta y Samantha Suquilanda
-    
+
     ---
-    
+
     ## Menú de Navegación
-    
+
     1. [Carga de Artefactos de Producción](#carga-de-artefactos-de-producción)
        - [Carga del modelo y componentes](#carga-del-modelo-y-componentes)
        - [Análisis de componentes cargados](#análisis-de-componentes-cargados)
-    
+
     2. [Función de Predicción](#función-de-predicción)
        - [Implementación de predict_demand()](#implementación-de-predict_demand)
        - [Análisis del flujo de inferencia](#análisis-del-flujo-de-inferencia)
-    
+
     3. [Validación con Productos Reales](#validación-con-productos-reales)
        - [Ejecución de predicciones múltiples](#ejecución-de-predicciones-múltiples)
-    
+
     4. [Documentación de Despliegue](#documentación-de-despliegue)
        - [Guía de uso de la función](#guía-de-uso-de-la-función)
        - [Propuesta de API REST con FastAPI](#propuesta-de-api-rest-con-fastapi)
-    
+
     ---
     """
     )
@@ -276,7 +276,7 @@ def _(np, pd, predict_demand):
     df_original = pd.read_csv('dataset_inventario_secuencial_completo.csv')
     unique_products = df_original['product_id'].unique()
 
-    NUM_PRODUCTS = 15
+    NUM_PRODUCTS = 50
     TARGET_DATE = '2025-10-31'
 
     np.random.seed(42)
@@ -332,44 +332,44 @@ def _(mo):
 def _(mo):
     mo.md(
         r"""
-    ## Documentación de Uso y Despliegue en Producción
-
-    ### Uso de la Función `predict_demand()`
-
-    La función principal de inferencia acepta dos parámetros y retorna una predicción numérica o un mensaje de error descriptivo.
-
-    **Firma de la función:**
-    ```python
-    predict_demand(product_id_str: str, target_date_str: str) -> float | str
-    ```
-
-    **Parámetros:**
-    - `product_id_str`: Identificador único del producto (ej. "PROD-00136830")
-    - `target_date_str`: Fecha objetivo en formato ISO "YYYY-MM-DD" (ej. "2025-10-31")
-
-    **Valor de retorno:**
-    - `float`: Predicción de stock en unidades reales (≥ 0)
-    - `str`: Mensaje de error si la validación falla o no hay datos suficientes
-
-    **Casos de uso:**
-
-    1. **Predicción exitosa:**
-    ```python
-    stock = predict_demand("PROD-00136830", "2025-10-31")
-    # Retorna: 4253.67
-    ```
-
-    2. **Producto no visto en entrenamiento:**
-    ```python
-    stock = predict_demand("PROD-NUEVO", "2025-10-31")
-    # Retorna: "Error: El ID de producto 'PROD-NUEVO' no fue visto durante el entrenamiento."
-    ```
-
-    3. **Historia insuficiente:**
-    ```python
-    stock = predict_demand("PROD-00136830", "2023-01-05")
-    # Retorna: "Error: No hay suficiente historia (3 días) para predecir. Se necesitan 7 días."
-    ```
+        ## Documentación de Uso y Despliegue en Producción
+    
+        ### Uso de la Función `predict_demand()`
+    
+        La función principal de inferencia acepta dos parámetros y retorna una predicción numérica o un mensaje de error descriptivo.
+    
+        **Firma de la función:**
+        ```python
+        predict_demand(product_id_str: str, target_date_str: str) -> float | str
+        ```
+    
+        **Parámetros:**
+        - `product_id_str`: Identificador único del producto (ej. "PROD-00136830")
+        - `target_date_str`: Fecha objetivo en formato ISO "YYYY-MM-DD" (ej. "2025-10-31")
+    
+        **Valor de retorno:**
+        - `float`: Predicción de stock en unidades reales (≥ 0)
+        - `str`: Mensaje de error si la validación falla o no hay datos suficientes
+    
+        **Casos de uso:**
+    
+        1. **Predicción exitosa:**
+        ```python
+        stock = predict_demand("PROD-00136830", "2025-10-31")
+        # Retorna: 4253.67
+        ```
+    
+        2. **Producto no visto en entrenamiento:**
+        ```python
+        stock = predict_demand("PROD-NUEVO", "2025-10-31")
+        # Retorna: "Error: El ID de producto 'PROD-NUEVO' no fue visto durante el entrenamiento."
+        ```
+    
+        3. **Historia insuficiente:**
+        ```python
+        stock = predict_demand("PROD-00136830", "2023-01-05")
+        # Retorna: "Error: No hay suficiente historia (3 días) para predecir. Se necesitan 7 días."
+        ```
     """
     )
     return
