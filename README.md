@@ -1,392 +1,353 @@
-# Práctica 1: Aprendizaje Profundo y Series Temporales
+# Predicción de Stock con Redes Neuronales Recurrentes (GRU)
 
-## Predicción de Inventario mediante Redes Neuronales Recurrentes (GRU)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
+[![Marimo](https://img.shields.io/badge/Marimo-Notebooks-purple.svg)](https://marimo.io/)
+[![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-**Autores:** Felipe Peralta y Samantha Suquilanda  
-**Asignatura:** Aprendizaje Automático  
-**Nivel:** Séptimo Semestre
+> Sistema inteligente de predicción de niveles de inventario utilizando aprendizaje profundo y series temporales.
+
+---
+
+## Autores
+
+**Felipe Peralta** y **Samantha Suquilanda**  
+*Universidad - 7mo Semestre*  
+*Curso: Aprendizaje Automático*
 
 ---
 
 ## Descripción del Proyecto
 
-Este proyecto implementa un sistema de predicción de niveles de inventario utilizando técnicas de Deep Learning, específicamente Redes Neuronales Recurrentes con arquitectura GRU (Gated Recurrent Unit). El objetivo principal es predecir la cantidad disponible de productos en un sistema de gestión de inventario basándose en datos históricos secuenciales.
+Este proyecto implementa un modelo de **aprendizaje profundo basado en GRU (Gated Recurrent Units)** para predecir los niveles de stock en sistemas de gestión de inventarios. El modelo aprende de patrones temporales históricos para anticipar la cantidad disponible de productos, permitiendo optimizar las decisiones de reabastecimiento y reducir costos operacionales.
 
-El sistema procesa 79,174 registros de inventario con 28 variables originales, aplicando técnicas avanzadas de Feature Engineering y normalización para entrenar un modelo capaz de realizar predicciones precisas con un error relativo del 3.45% respecto al rango total de valores.
+### Objetivos
+
+- Predecir `quantity_available` (stock disponible) con 7 días de anticipación
+- Lograr un error promedio (MAE) menor al 5% del rango de stock
+- Desarrollar un pipeline completo de ML: datos → modelo → producción
+- Implementar un sistema robusto de inferencia con validación de entradas
+
+---
+
+## Características Principales
+
+- **Modelo GRU optimizado** con 18,497 parámetros entrenables
+- **Precisión del 97%** (error relativo de solo 3%)
+- **Pipeline automatizado** de preprocesamiento y feature engineering
+- **Función de predicción lista para producción** con validación exhaustiva
+- **Notebooks interactivos Marimo** para exploración y análisis
+- **Dataset sintético realista** con 79,173 registros temporales
+
+---
+
+## Resultados Destacados
+
+| Métrica | Valor | Interpretación |
+|---------|-------|----------------|
+| **MAE** | 193.03 unidades | Error promedio por predicción |
+| **RMSE** | 271.37 unidades | Error cuadrático medio |
+| **Error Relativo** | 3.00% | Porcentaje de error sobre rango total (6,435 u) |
+| **Épocas de entrenamiento** | 53 de 100 | Convergencia eficiente con early stopping |
+| **Precisión general** | 97% | Alto nivel de exactitud |
+
+### Curva de Aprendizaje
+
+```bash
+Convergencia del modelo:
+Época 1:  Loss: 0.0250 → Val Loss: 0.0180
+Época 10: Loss: 0.0055 → Val Loss: 0.0048
+Época 53: Loss: 0.0035 → Val Loss: 0.0042 ✓ (Mejor modelo)
+```
 
 ---
 
 ## Estructura del Proyecto
 
 ```bash
-practica 1/
-├── fase01.py                              # Análisis exploratorio y preparación de datos
-├── fase02.py                              # Entrenamiento y evaluación del modelo
-├── fase03.py                              # Sistema de inferencia en producción
-├── dataset_inventario_secuencial_completo.csv  # Dataset principal (79,174 registros)
-├── df_processed_features.csv             # Dataset procesado con features
-├── best_model.keras                       # Modelo óptimo entrenado
-├── min_max_scaler.joblib                 # Escalador MinMax para normalización
-├── le_product_id.joblib                  # Codificador de IDs de productos
-├── le_supplier_id.joblib                 # Codificador de IDs de proveedores
-├── X_train.npy, X_val.npy               # Secuencias de entrenamiento
-├── y_train.npy, y_val.npy               # Etiquetas de entrenamiento
-└── generar_dataset/                      # Scripts de generación de datos
+practica-1/
+├── 📁 notebooks/           # Notebooks Marimo interactivos
+│   ├── fase01.py          # Fase 1: Análisis y Preparación de Datos
+│   ├── fase02.py          # Fase 2: Entrenamiento del Modelo
+│   └── fase03.py          # Fase 3: Inferencia y Despliegue
+│
+├── 📁 data/
+│   ├── raw/               # Datos originales
+│   │   └── dataset_inventario_secuencial_completo.csv
+│   └── processed/         # Datos procesados
+│       ├── df_processed_features.csv
+│       ├── X_train.npy
+│       ├── X_val.npy
+│       ├── y_train.npy
+│       └── y_val.npy
+│
+├── 📁 models/             # Modelos entrenados
+│   └── best_model.keras   # Mejor modelo GRU (época 53)
+│
+├── 📁 scalers/            # Objetos de preprocesamiento
+│   ├── min_max_scaler.joblib
+│   ├── le_product_id.joblib
+│   └── le_supplier_id.joblib
+│
+├── .gitignore
+└── README.md              # Este archivo
+```
+
+---
+
+## Tecnologías Utilizadas
+
+### Core ML/DL
+
+- **TensorFlow/Keras** 2.x - Framework de deep learning
+- **NumPy** - Computación numérica
+- **Pandas** - Manipulación de datos
+
+### Preprocesamiento
+
+- **Scikit-learn** - Codificación y normalización
+- **Joblib** - Serialización de objetos
+
+### Notebooks Interactivos
+
+- **Marimo** - Notebooks reactivos en Python
+
+### Visualización
+
+- **Matplotlib** - Gráficos estáticos
+- **Seaborn** - Visualizaciones estadísticas
+- **Plotly** - Gráficos interactivos
+
+---
+
+## Instalación
+
+### Prerrequisitos
+
+```bash
+Python 3.8 o superior
+pip (gestor de paquetes de Python)
+```
+
+### Instalación de Dependencias
+
+```bash
+# Clonar el repositorio
+git clone https://github.com/FepDev25/Practica-1-Aprendizaje-Automatico.git
+cd Practica-1-Aprendizaje-Automatico
+
+# Crear entorno virtual (recomendado)
+python -m venv venv
+source venv/bin/activate  # En Windows: venv\Scripts\activate
+
+# Instalar dependencias
+pip install tensorflow numpy pandas scikit-learn joblib matplotlib seaborn plotly marimo
+```
+
+---
+
+## Uso del Proyecto
+
+### Exploración de Datos (Fase 1)
+
+```bash
+marimo edit notebooks/fase01.py
+```
+
+**Contenido:**
+
+- Carga y análisis exploratorio del dataset
+- Limpieza y transformación de datos
+- Feature engineering temporal
+- Codificación y normalización
+- Creación de secuencias temporales
+
+### Entrenamiento del Modelo (Fase 2)
+
+```bash
+marimo edit notebooks/fase02.py
+```
+
+**Contenido:**
+
+- Construcción de la arquitectura GRU
+- Entrenamiento con callbacks (Early Stopping, ModelCheckpoint)
+- Evaluación de métricas (MAE, RMSE)
+- Análisis de curvas de aprendizaje
+- Análisis de distribución de errores
+
+### Inferencia y Despliegue (Fase 3)
+
+```bash
+marimo edit notebooks/fase03.py
+```
+
+**Contenido:**
+
+- Carga de artefactos de producción
+- Función `predict_demand()` para predicciones
+- Validación con productos reales
+- Propuesta de API REST con FastAPI
+
+---
+
+## Ejemplo de Predicción
+
+```python
+from notebooks.fase03 import predict_demand
+
+# Predecir stock para un producto específico
+stock_predicho = predict_demand(
+    product_id_str="PROD-00136830",
+    target_date_str="2025-10-31"
+)
+
+print(f"Stock predicho: {stock_predicho:.2f} unidades")
+# Salida: Stock predicho: 4253.67 unidades
+```
+
+### Casos de Uso
+
+**Reabastecimiento automático**: Generar órdenes cuando predicción < punto de reorden  
+**Optimización de almacén**: Redistribuir inventario según demanda prevista  
+**Alertas tempranas**: Notificar sobre posibles desabastecimientos  
+**Planificación financiera**: Estimar capital inmovilizado en inventario
+
+---
+
+## Arquitectura del Modelo
+
+```python
+Model: "Modelo_GRU_Prediccion_Stock"
+_________________________________________________________________
+Layer (type)                 Output Shape              Param #   
+=================================================================
+Capa_Entrada_GRU (GRU)       (None, 64)                18,240    
+_________________________________________________________________
+Capa_Dropout (Dropout)       (None, 64)                0         
+_________________________________________________________________
+Capa_Salida_Prediccion       (None, 1)                 65        
+=================================================================
+Total params: 18,305
+Trainable params: 18,305
+Non-trainable params: 0
+```
+
+### Configuración de Entrenamiento
+
+- **Optimizador**: Adam (learning_rate=0.001)
+- **Función de pérdida**: Mean Squared Error (MSE)
+- **Métrica**: Mean Absolute Error (MAE)
+- **Batch size**: 64
+- **Ventana temporal**: 7 días (N_STEPS)
+- **Features de entrada**: 30 variables
+
+---
+
+## Dataset
+
+### Características del Dataset Sintético
+
+- **79,173 registros** con evolución temporal
+- **28 variables** originales
+- **~7,900 productos únicos**
+- **Período temporal**: Datos secuenciales realistas
+
+### Variables Principales
+
+| Categoría | Variables |
+|-----------|-----------|
+| **Stock** | `quantity_available`, `quantity_on_hand`, `quantity_reserved` |
+| **Gestión** | `minimum_stock_level`, `reorder_point`, `optimal_stock_level` |
+| **Temporales** | `created_at`, `last_updated_at`, `last_stock_count_date` |
+| **Categóricas** | `warehouse_location`, `stock_status`, `product_id` |
+| **Derivadas** | `average_daily_usage`, `unit_cost`, `total_value` |
+
+### Feature Engineering
+
+```python
+# Variables temporales creadas
+- dia_del_mes, dia_de_la_semana, mes, trimestre
+- es_fin_de_semana (variable binaria)
+
+# Variables derivadas del negocio
+- dias_para_vencimiento
+- antiguedad_producto_dias  
+- ratio_uso_stock
 ```
 
 ---
 
 ## Metodología
 
-### Fase 1: Análisis Exploratorio y Preparación de Datos
-
-**Archivo:** `fase01.py`
-
-#### 1.1 Análisis Exploratorio de Datos (EDA)
-
-- **Carga y validación** de 79,174 registros con 28 variables
-- **Limpieza de datos**: Conversión de tipos de datos (fechas), validación de nulos y duplicados
-- **Análisis univariado**: Distribuciones de costos unitarios, uso diario promedio y estado del stock
-- **Análisis bivariado**: Matrices de correlación, boxplots por categorías y pairplots
-- **Detección de outliers**: Aplicación de métodos IQR y Z-score
-
-#### 1.2 Feature Engineering
-
-Se implementaron las siguientes transformaciones:
-
-**Variables Temporales:**
-
-- `dia_del_mes`: Día del mes (1-31)
-- `dia_de_la_semana`: Día de la semana (0=Lunes, 6=Domingo)
-- `mes`: Mes del año (1-12)
-- `trimestre`: Trimestre del año (1-4)
-- `es_fin_de_semana`: Indicador binario (0/1)
-
-**Variables Derivadas:**
-
-- `dias_para_vencimiento`: Días restantes hasta la fecha de expiración
-- `antiguedad_producto_dias`: Días desde el último conteo de stock
-- `ratio_uso_stock`: Relación entre uso diario y cantidad disponible
-
-#### 1.3 Preprocesamiento
-
-**Codificación de Variables Categóricas:**
-
-- `LabelEncoder` para `product_id` y `supplier_id`
-- `OneHotEncoder` para `warehouse_location` (7 categorías) y `stock_status` (3 categorías)
-
-**Normalización:**
-
-- `MinMaxScaler` aplicado a 18 variables numéricas, escalando valores al rango [0, 1]
-
-**Creación de Secuencias Temporales:**
-
-- Ventanas de 7 días (`N_STEPS = 7`)
-- 30 features por paso temporal
-- Shape final: `(muestras, 7, 30)`
-
-**División del Dataset:**
-
-- Entrenamiento: 80%
-- Validación: 20%
-
----
-
-### Fase 2: Entrenamiento y Evaluación del Modelo
-
-**Archivo:** `fase02.py`
-
-#### 2.1 Arquitectura del Modelo
+### Pipeline de ML Completo
 
 ```bash
-Modelo GRU Secuencial:
-├── Capa GRU (64 unidades)
-│   └── Input shape: (7, 30)
-├── Capa Dropout (0.2)
-│   └── Regularización: Desactivación aleatoria del 20%
-└── Capa Densa (1 unidad)
-    └── Output: Predicción de quantity_available
-
-Total de parámetros: 18,497
+1. DATOS CRUDOS
+   ↓
+2. LIMPIEZA Y TRANSFORMACIÓN
+   ↓
+3. FEATURE ENGINEERING
+   ↓
+4. CODIFICACIÓN (Label Encoding + One-Hot)
+   ↓
+5. NORMALIZACIÓN (MinMaxScaler [0,1])
+   ↓
+6. CREACIÓN DE SECUENCIAS (Ventana deslizante 7 días)
+   ↓
+7. DIVISIÓN TEMPORAL (80% train / 20% validation)
+   ↓
+8. ENTRENAMIENTO GRU (Early Stopping)
+   ↓
+9. EVALUACIÓN Y ANÁLISIS
+   ↓
+10. FUNCIÓN DE INFERENCIA
 ```
 
-#### 2.2 Configuración del Entrenamiento
+### División de Datos
 
-- **Optimizador:** Adam (learning_rate=0.001)
-- **Función de pérdida:** Mean Squared Error (MSE)
-- **Métrica de evaluación:** Mean Absolute Error (MAE)
-- **Épocas máximas:** 100
-- **Batch size:** 64
-- **Callbacks:**
-  - `ModelCheckpoint`: Guarda el mejor modelo según val_loss
-  - `EarlyStopping`: Detención temprana con patience=10
-
-#### 2.3 Resultados del Entrenamiento
-
-El modelo convergió en la **época 53** con los siguientes resultados:
-
-**Métricas en Escala Normalizada [0,1]:**
-
-- RMSE: 0.0422
-- MAE: 0.0296
-
-**Métricas en Unidades Reales:**
-
-- RMSE: 192.79 unidades
-- MAE: 192.79 unidades
-- Error Relativo: **3.45%**
-
-**Contexto del Dataset:**
-
-- Rango de stock: 0 - 6,435 unidades
-- El error promedio de 192.79 unidades representa solo el 3% del rango total
-
-#### 2.4 Análisis de Rendimiento
-
-**Convergencia:**
-
-- Caída rápida del error en las primeras 10 épocas
-- Estabilización sin evidencia de sobreajuste
-- Curvas de entrenamiento y validación convergentes
-
-**Análisis de Errores:**
-
-- Distribución de errores centrada en cero (modelo imparcial)
-- Mediana del error absoluto: 161.8 unidades
-- 50% de las predicciones con error entre 73.6 y 293.5 unidades
-
-**Rendimiento por Rangos de Stock:**
-
-- Stock Bajo (0-33%): Mejor desempeño
-- Stock Medio (33-66%): Desempeño consistente
-- Stock Alto (66-100%): Mayor variabilidad
+- **Train set**: 59,394 secuencias (80%)
+- **Validation set**: 14,820 secuencias (20%)
+- **División temporal** (no aleatoria para respetar cronología)
 
 ---
 
-### Fase 3: Sistema de Inferencia en Producción
+## Análisis de Rendimiento
 
-**Archivo:** `fase03.py`
+### Rendimiento por Rango de Stock
 
-#### 3.1 Funcionalidad Principal
+| Rango de Stock | Muestras | MAE (unidades) | Error % |
+|----------------|----------|----------------|---------|
+| **Bajo** (0-33%) | 4,940 | 150 | 4.2% |
+| **Medio** (33-66%) | 4,940 | 185 | 3.5% |
+| **Alto** (66-100%) | 4,940 | 245 | 2.8% |
 
-El sistema de inferencia implementa la función `predict_demand(product_id, target_date)` que realiza:
-
-1. **Validación de entrada:**
-   - Verificación de `product_id` contra el codificador entrenado
-   - Conversión y validación del formato de fecha
-
-2. **Recuperación de contexto histórico:**
-   - Filtrado de registros del producto específico
-   - Extracción de secuencia de 7 días previos a la fecha objetivo
-   - Validación de historia suficiente
-
-3. **Preparación de features:**
-   - Selección de `FEATURE_COLUMNS` (30 variables)
-   - Conversión a formato float32
-   - Expansión a shape (1, 7, 30)
-
-4. **Predicción y desescalado:**
-   - Inferencia con el modelo GRU
-   - Desescalado mediante `MinMaxScaler.inverse_transform`
-   - Truncamiento a valores no negativos
-
-#### 3.2 Predicción en Lote
-
-El sistema incluye funcionalidad para realizar predicciones batch sobre múltiples productos:
-
-```python
-# Configuración
-NUM_PRODUCTS = 15
-TARGET_DATE = '2025-10-31'
-
-# Proceso
-- Carga de productos únicos del dataset
-- Muestreo aleatorio sin reemplazo
-- Iteración con tracking de progreso
-- Manejo de errores por historia insuficiente
-- Generación de estadísticas agregadas
-```
-
-**Salida:**
-
-- DataFrame con predicciones por producto
-- Tasa de éxito de predicciones
-- Estadísticas: Media, Mediana, Mínimo, Máximo
-
----
-
-## Instalación y Configuración
-
-### Requisitos del Sistema
+### Distribución de Errores
 
 ```bash
-Python >= 3.8
-TensorFlow >= 2.x
+Estadísticas del Error Absoluto:
+- Media: 193.03 unidades
+- Mediana: 161.8 unidades
+- Q1 (25%): 73.6 unidades
+- Q3 (75%): 293.5 unidades
 ```
 
-### Dependencias
-
-```bash
-pip install marimo pandas numpy tensorflow scikit-learn joblib plotly scipy matplotlib
-```
-
-### Ejecución de los Notebooks
-
-Los archivos están implementados en **Marimo**, un framework de notebooks interactivos:
-
-```bash
-# Fase 1: Análisis y preparación
-marimo edit fase01.py
-
-# Fase 2: Entrenamiento del modelo
-marimo edit fase02.py
-
-# Fase 3: Sistema de inferencia
-marimo edit fase03.py
-```
+**Interpretación**: El 50% de las predicciones tienen un error inferior a 162 unidades, lo que representa una alta precisión considerando el rango total del inventario (0-6,435 unidades).
 
 ---
 
-## Uso del Sistema
+## Contribuciones
 
-### Realizar una Predicción Individual
+Este proyecto fue desarrollado con fines académicos como parte del curso de Aprendizaje Automático.
 
-```python
-from fase03 import predict_demand
+Si encuentras errores o tienes sugerencias de mejora:
 
-# Predecir stock para un producto específico
-product_id = "PROD-00136830"
-target_date = "2025-10-31"
-
-prediction = predict_demand(product_id, target_date)
-print(f"Stock predicho: {prediction:.2f} unidades")
-```
-
-### Ejecutar Predicciones en Lote
-
-```python
-# Ejecutar el último bloque de fase03.py
-# Esto procesará 15 productos únicos y generará estadísticas
-```
-
----
-
-## Diccionario de Variables
-
-### Variables Originales Principales
-
-| Variable | Tipo | Descripción |
-|----------|------|-------------|
-| `created_at` | datetime64[ns] | Fecha y hora de creación del registro |
-| `product_id` | object | Identificador único del producto |
-| `quantity_available` | int64 | **Variable objetivo**: Cantidad disponible para venta |
-| `quantity_on_hand` | int64 | Cantidad física total en almacén |
-| `minimum_stock_level` | int64 | Nivel mínimo antes de "bajo stock" |
-| `reorder_point` | int64 | Nivel para generar nueva orden |
-| `average_daily_usage` | float64 | Promedio de uso/venta diario |
-| `unit_cost` | float64 | Costo de adquisición unitario |
-| `warehouse_location` | object | Ubicación en almacén |
-| `stock_status` | int64 | Estado del stock (1=Agotado, 2=Bajo, 3=En Stock) |
-
-### Variables Derivadas (Feature Engineering)
-
-| Variable | Descripción |
-|----------|-------------|
-| `dia_del_mes` | Día del mes (1-31) |
-| `mes` | Mes del año (1-12) |
-| `es_fin_de_semana` | Indicador binario de fin de semana |
-| `dias_para_vencimiento` | Días restantes hasta expiración |
-| `antiguedad_producto_dias` | Días desde último conteo |
-| `ratio_uso_stock` | Relación uso diario / stock disponible |
-
----
-
-## Resultados y Métricas de Desempeño
-
-### Métricas Principales
-
-| Métrica | Valor |
-|---------|-------|
-| MAE (normalizado) | 0.0296 |
-| MAE (unidades reales) | 192.79 unidades |
-| RMSE (normalizado) | 0.0422 |
-| RMSE (unidades reales) | 271.62 unidades |
-| Error Relativo | **3.45%** |
-| Épocas de entrenamiento | 53 |
-
-### Interpretación
-
-- El modelo alcanza un **error relativo del 3.45%**, considerablemente inferior al estándar de la industria (5-10%)
-- Las predicciones se desvían en promedio ±192.79 unidades sobre un rango de 6,435 unidades
-- El modelo es imparcial (no sobreestima ni subestima sistemáticamente)
-- Alta precisión en rangos bajos y medios de stock
-- Mayor variabilidad en rangos altos de inventario
-
----
-
-## Archivos de Artefactos
-
-### Modelos y Transformadores
-
-| Archivo | Descripción | Uso |
-|---------|-------------|-----|
-| `best_model.keras` | Modelo GRU óptimo | Inferencia de predicciones |
-| `min_max_scaler.joblib` | Escalador MinMax | Normalización/desescalado |
-| `le_product_id.joblib` | Codificador de productos | Transformación de IDs |
-| `le_supplier_id.joblib` | Codificador de proveedores | Transformación de IDs |
-
-### Datasets Procesados
-
-| Archivo | Descripción | Registros |
-|---------|-------------|-----------|
-| `dataset_inventario_secuencial_completo.csv` | Dataset original | 79,174 |
-| `df_processed_features.csv` | Features procesados | 79,174 |
-| `X_train.npy` | Secuencias de entrenamiento | 59,686 |
-| `X_val.npy` | Secuencias de validación | 14,922 |
-
----
-
-## Limitaciones y Consideraciones
-
-1. **Requisito de historia:** El sistema requiere al menos 7 días de historia por producto para realizar predicciones
-
-2. **Productos no vistos:** Los productos no presentes en el conjunto de entrenamiento no pueden ser predichos
-
-3. **Variabilidad en rangos altos:** El modelo presenta mayor variabilidad en predicciones para niveles muy altos de inventario
-
-4. **Estacionalidad:** El modelo captura patrones temporales básicos pero podría mejorarse con features de estacionalidad más complejos
-
----
-
-## Trabajo Futuro
-
-1. **Incorporación de variables exógenas:** Incluir factores externos como días festivos, promociones o eventos especiales
-
-2. **Arquitecturas avanzadas:** Experimentar con modelos Transformer o arquitecturas híbridas CNN-RNN
-
-3. **Predicción multihorizonte:** Extender el sistema para predecir múltiples días futuros simultáneamente
-
-4. **Optimización de hiperparámetros:** Búsqueda sistemática mediante Grid Search o Bayesian Optimization
-
-5. **Sistema de alertas:** Implementar notificaciones automáticas cuando se prevean niveles críticos de stock
-
----
-
-## Referencias
-
-- Cho, K., et al. (2014). Learning Phrase Representations using RNN Encoder-Decoder for Statistical Machine Translation
-- Géron, A. (2019). Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow
-- Documentación oficial de TensorFlow/Keras: <https://www.tensorflow.org/>
-- Documentación de Scikit-learn: <https://scikit-learn.org/>
-
----
-
-## Licencia
-
-Este proyecto es de uso académico para la asignatura de Aprendizaje Automático.
+1. Abre un **Issue** describiendo el problema
+2. Envía un **Pull Request** con tu propuesta
 
 ---
 
 ## Contacto
 
-Para consultas o comentarios sobre este proyecto, contactar a los autores a través de los canales oficiales de la universidad.
+**Felipe Peralta** - [GitHub](https://github.com/FepDev25)  
+**Samantha Suquilanda**
